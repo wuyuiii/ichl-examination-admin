@@ -12,10 +12,18 @@ const toggleDark = () => {
 <template>
   <div class="header-container">
     <div class="header-top">
-      <div class="header-menu-box" @click="optionStore.handleCollapse">
-        <el-icon class="header-menu-click" size="22px">
-          <i-ep-Menu />
-        </el-icon>
+      <div class="header-left">
+        <div class="header-menu-box" @click="optionStore.handleCollapse">
+          <el-icon class="header-menu-click" size="22px">
+            <i-ep-Menu />
+          </el-icon>
+        </div>
+        <el-breadcrumb class="header-breadcrumb" :separator-icon="ArrowRight">
+          <el-breadcrumb-item :to="{ path: '/' }">主页</el-breadcrumb-item>
+          <el-breadcrumb-item>promotion management</el-breadcrumb-item>
+          <el-breadcrumb-item>promotion list</el-breadcrumb-item>
+          <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
+        </el-breadcrumb>
       </div>
       <div class="header-items">
         <div class="header-switch-group">
@@ -47,12 +55,9 @@ const toggleDark = () => {
         </el-dropdown>
       </div>
     </div>
-    <el-breadcrumb class="header-breadcrumb" :separator-icon="ArrowRight">
-      <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-      <el-breadcrumb-item>promotion management</el-breadcrumb-item>
-      <el-breadcrumb-item>promotion list</el-breadcrumb-item>
-      <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
-    </el-breadcrumb>
+    <div class="header-bottom">
+      <el-tag closable>nih</el-tag>
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -70,21 +75,35 @@ const toggleDark = () => {
     padding-right: 1.25rem;
     border-bottom: 1px solid var(--el-border-color);
     margin-bottom: 0.625rem;
-    .header-menu-box {
-      height: 100%;
-      padding: 0 0.625rem;
-      cursor: pointer;
+    .header-left {
       display: flex;
-      align-items: center;
       justify-content: center;
-      transition: all 0.4s;
-      .header-menu-click {
+      align-items: center;
+      height: 100%;
+      .header-menu-box {
+        height: 100%;
+        padding: 0 0.625rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         transition: all 0.4s;
-      }
-      &:hover {
-        background-color: var(--el-menu-hover-bg-color);
         .header-menu-click {
-          color: #838383;
+          transition: all 0.4s;
+        }
+        &:hover {
+          background-color: var(--el-menu-hover-bg-color);
+          .header-menu-click {
+            color: #838383;
+          }
+        }
+      }
+      .header-breadcrumb {
+        height: 100%;
+        padding-left: 1.25rem;
+        display: flex;
+        &:deep(.el-breadcrumb__inner) {
+          font-weight: 520;
         }
       }
     }
@@ -100,18 +119,22 @@ const toggleDark = () => {
         justify-content: space-around;
         align-items: center;
         margin-right: 1.25rem;
+        .el-switch {
+          height: 1.5rem;
+        }
       }
       .el-dropdown-span {
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
+        .el-avatar {
+          margin-right: 0.625rem;
+        }
       }
     }
   }
-
-  .header-breadcrumb {
-    height: 24px;
+  .header-bottom {
     padding-left: 1.25rem;
   }
 }

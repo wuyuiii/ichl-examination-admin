@@ -1,3 +1,3 @@
 <template>
-  <div>home</div>
+  <div>user/list</div>
 </template>

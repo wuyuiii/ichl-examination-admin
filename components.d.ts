@@ -25,6 +25,7 @@ declare module 'vue' {
     ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
+    ElTag: typeof import('element-plus/es')['ElTag']
     'IEp-Menu': typeof import('~icons/ep/-menu')['default']
     IEpCollectionTag: typeof import('~icons/ep/collection-tag')['default']
     IEpDiscount: typeof import('~icons/ep/discount')['default']

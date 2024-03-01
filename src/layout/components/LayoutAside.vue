@@ -1,87 +1,108 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useOptionStore } from '@/stores'
+import { useRouter, useRoute } from 'vue-router'
 const optionStore = useOptionStore()
+const router = useRouter()
+const route = useRoute()
+const backHome = () => {
+  router.push('/')
+}
+
+const handleSelect = (index: string, indexPath: string, item: string) => {
+  console.log(index, indexPath, item)
+  console.log(route.matched)
+}
 </script>
 
 <template>
   <el-menu
-    default-active="0"
+    :default-active="route.fullPath"
+    router
     class="aside-container"
     :collapse="optionStore.isCollapse"
+    @select="handleSelect"
   >
-    <div class="aside-logo">logo</div>
-    <el-menu-item index="0">
+    <div class="aside-logo" @click="backHome">logo</div>
+    <el-menu-item index="/home">
       <el-icon><i-ep-House /></el-icon>
       <span>主页</span>
     </el-menu-item>
-    <el-sub-menu index="1">
+    <el-sub-menu index="/user">
       <template #title>
         <el-icon><i-ep-User /></el-icon>
         <span class="title-text">用户管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="1-1">学生列表</el-menu-item>
-        <el-menu-item index="1-2">教师列表</el-menu-item>
-        <el-menu-item index="1-3">管理员列表</el-menu-item>
+        <el-menu-item index="/user/student">学生列表</el-menu-item>
+        <el-menu-item index="/user/teacher">教师列表</el-menu-item>
+        <el-menu-item index="/user/admin">管理员列表</el-menu-item>
       </el-menu-item-group>
     </el-sub-menu>
-    <el-sub-menu index="2">
+    <el-sub-menu index="/subject">
       <template #title>
         <el-icon><i-ep-Notebook /></el-icon>
         <span class="title-text">学科管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="2-1">学科列表</el-menu-item>
-        <el-menu-item index="2-2">学科创建</el-menu-item>
+        <el-menu-item index="/subject/list">学科列表</el-menu-item>
+        <el-menu-item index="/subject/edit">学科创建</el-menu-item>
       </el-menu-item-group>
     </el-sub-menu>
-    <el-sub-menu index="3">
+    <el-sub-menu index="/paper">
       <template #title>
         <el-icon><i-ep-Document /></el-icon>
         <span class="title-text">卷库管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="3-1">试卷列表</el-menu-item>
-        <el-menu-item index="3-2">试卷创建</el-menu-item>
+        <el-menu-item index="/paper/list">试卷列表</el-menu-item>
+        <el-menu-item index="/paper/edit">试卷创建</el-menu-item>
       </el-menu-item-group>
     </el-sub-menu>
-    <el-sub-menu index="4">
+    <el-sub-menu index="/question">
       <template #title>
         <el-icon><i-ep-CollectionTag /></el-icon>
         <span class="title-text">题库管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="4-1">题目列表</el-menu-item>
-        <el-menu-item index="4-2">单选题创建</el-menu-item>
-        <el-menu-item index="4-3">多选题创建</el-menu-item>
-        <el-menu-item index="4-4">判断题创建</el-menu-item>
-        <el-menu-item index="4-5">填空题创建</el-menu-item>
-        <el-menu-item index="4-6">简答题创建</el-menu-item>
+        <el-menu-item index="/question/list">题目列表</el-menu-item>
+        <el-menu-item index="/question/edit/singleChoice"
+          >单选题创建</el-menu-item
+        >
+        <el-menu-item index="/question/edit/multipleChoice"
+          >多选题创建</el-menu-item
+        >
+        <el-menu-item index="/question/edit/trueFalse">判断题创建</el-menu-item>
+        <el-menu-item index="/question/edit/gapFilling"
+          >填空题创建</el-menu-item
+        >
+        <el-menu-item index="/question/edit/shortAnswer"
+          >简答题创建</el-menu-item
+        >
       </el-menu-item-group>
     </el-sub-menu>
-    <el-sub-menu index="5">
+    <el-sub-menu index="/message">
       <template #title>
         <el-icon><i-ep-Message /></el-icon>
         <span class="title-text">消息管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="5-1">消息列表</el-menu-item>
-        <el-menu-item index="5-2">消息发送</el-menu-item>
+        <el-menu-item index="/message/list">消息列表</el-menu-item>
+        <el-menu-item index="/message/send">消息发送</el-menu-item>
       </el-menu-item-group>
     </el-sub-menu>
-    <el-sub-menu index="6">
+    <el-sub-menu index="/edu">
       <template #title>
         <el-icon><i-ep-Discount /></el-icon>
         <span class="title-text">教务管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="6-1">学院列表</el-menu-item>
-        <el-menu-item index="6-2">学院创建</el-menu-item>
-        <el-menu-item index="6-3">专业列表</el-menu-item>
-        <el-menu-item index="6-4">专业创建</el-menu-item>
-        <el-menu-item index="6-5">班级列表</el-menu-item>
-        <el-menu-item index="6-6">班级创建</el-menu-item>
+        <el-menu-item index="/edu/college/list">学院列表</el-menu-item>
+        <el-menu-item index="/edu/college/edit">学院创建</el-menu-item>
+        <el-menu-item index="/edu/department/list">专业列表</el-menu-item>
+        <el-menu-item index="/edu/department/edit">专业创建</el-menu-item>
+        <el-menu-item index="/edu/class/list">班级列表</el-menu-item>
+        <el-menu-item index="/edu/class/edit">班级创建</el-menu-item>
       </el-menu-item-group>
     </el-sub-menu>
   </el-menu>
@@ -96,9 +117,16 @@ const optionStore = useOptionStore()
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
   }
   .title-text {
     padding-right: 1.5rem;
+  }
+  &:deep(.el-menu) {
+    background-color: #fbfbfb;
+    .el-menu-item-group__title {
+      padding: 0;
+    }
   }
 }
 </style>

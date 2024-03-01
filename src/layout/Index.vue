@@ -10,7 +10,7 @@ import LayoutHeader from './components/LayoutHeader.vue'
     </el-aside>
     <el-container>
       <el-header style="padding: 0; height: auto"><LayoutHeader /></el-header>
-      <el-main>Main</el-main>
+      <el-main><router-view></router-view></el-main>
       <el-footer>Footer</el-footer>
     </el-container>
   </el-container>
