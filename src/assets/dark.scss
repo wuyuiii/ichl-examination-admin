@@ -2,4 +2,10 @@ html.dark {
     .el-menu {
         background-color: transparent !important;
       }
+      ::-webkit-scrollbar-thumb{
+        background-color: #323232;
+        &:hover{
+          background-color: #4d4c4c;
+        }
+      }
 }

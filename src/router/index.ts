@@ -13,9 +13,13 @@ const router = createRouter({
       redirect: '/home',
       component: () => import('@/layout/Index.vue'),
       children: [
-        { path: '/home', component: () => import('@/views/Home/Index.vue') },
+        {
+          path: '/home',
+          component: () => import('@/views/Home/Index.vue')
+        },
         {
           path: '/user',
+          meta: { title: '用户管理' },
           children: [
             {
               path: '/user/student',
@@ -23,10 +27,14 @@ const router = createRouter({
               children: [
                 {
                   path: '/user/student/list',
+                  name: '/user/student/list',
+                  meta: { title: '学生列表' },
                   component: () => import('@/views/User/StudentList.vue')
                 },
                 {
                   path: '/user/student/edit',
+                  name: '/user/student/edit',
+                  meta: { title: '学生创编' },
                   component: () => import('@/views/User/StudentList.vue')
                 }
               ]
@@ -37,10 +45,14 @@ const router = createRouter({
               children: [
                 {
                   path: '/user/teacher/list',
+                  name: '/user/teacher/list',
+                  meta: { title: '教师列表' },
                   component: () => import('@/views/User/TeacherList.vue')
                 },
                 {
                   path: '/user/teacher/edit',
+                  name: '/user/teacher/edit',
+                  meta: { title: '教师创编' },
                   component: () => import('@/views/User/StudentList.vue')
                 }
               ]
@@ -51,10 +63,14 @@ const router = createRouter({
               children: [
                 {
                   path: '/user/admin/list',
+                  name: '/user/admin/list',
+                  meta: { title: '管理员列表' },
                   component: () => import('@/views/User/AdminList.vue')
                 },
                 {
                   path: '/user/admin/edit',
+                  name: '/user/admin/edit',
+                  meta: { title: '管理员创编' },
                   component: () => import('@/views/User/StudentList.vue')
                 }
               ]
@@ -63,35 +79,43 @@ const router = createRouter({
         },
         {
           path: '/subject',
+          meta: { title: '学科管理' },
           children: [
             {
               path: '/subject/list',
+              meta: { title: '学科列表' },
               component: () => import('@/views/Subject/SubjectList.vue')
             },
             {
               path: '/subject/edit',
+              meta: { title: '学科创编' },
               component: () => import('@/views/Subject/SubjectEdit.vue')
             }
           ]
         },
         {
           path: '/paper',
+          meta: { title: '卷库管理' },
           children: [
             {
               path: '/paper/list',
+              meta: { title: '卷库列表' },
               component: () => import('@/views/Paper/PaperList.vue')
             },
             {
               path: '/paper/edit',
+              meta: { title: '卷库创编' },
               component: () => import('@/views/Paper/PaperEdit.vue')
             }
           ]
         },
         {
           path: '/question',
+          meta: { title: '题库管理' },
           children: [
             {
               path: '/question/list',
+              meta: { title: '题库列表' },
               component: () => import('@/views/Question/QuestionList.vue')
             },
             {
@@ -99,25 +123,30 @@ const router = createRouter({
               children: [
                 {
                   path: '/question/edit/singleChoice',
+                  meta: { title: '单选题创编' },
                   component: () =>
                     import('@/views/Question/Edit/singleChoice.vue')
                 },
                 {
                   path: '/question/edit/multipleChoice',
+                  meta: { title: '多选题创编' },
                   component: () =>
                     import('@/views/Question/Edit/multipleChoice.vue')
                 },
                 {
                   path: '/question/edit/trueFalse',
+                  meta: { title: '判断题创编' },
                   component: () => import('@/views/Question/Edit/trueFalse.vue')
                 },
                 {
                   path: '/question/edit/gapFilling',
+                  meta: { title: '填空题创编' },
                   component: () =>
                     import('@/views/Question/Edit/gapFilling.vue')
                 },
                 {
                   path: '/question/edit/shortAnswer',
+                  meta: { title: '简答题创编' },
                   component: () =>
                     import('@/views/Question/Edit/shortAnswer.vue')
                 }
@@ -127,29 +156,35 @@ const router = createRouter({
         },
         {
           path: '/message',
+          meta: { title: '消息管理' },
           children: [
             {
               path: '/message/list',
+              meta: { title: '消息列表' },
               component: () => import('@/views/Message/MessageList.vue')
             },
             {
               path: '/message/send',
+              meta: { title: '消息发送' },
               component: () => import('@/views/Message/MessageSend.vue')
             }
           ]
         },
         {
           path: '/edu',
+          meta: { title: '教务管理' },
           children: [
             {
               path: '/edu/college',
               children: [
                 {
                   path: '/edu/college/list',
+                  meta: { title: '学院列表' },
                   component: () => import('@/views/Edu/College/CollegeList.vue')
                 },
                 {
                   path: '/edu/college/edit',
+                  meta: { title: '学院编辑' },
                   component: () => import('@/views/Edu/College/CollegeEdit.vue')
                 }
               ]
@@ -159,11 +194,13 @@ const router = createRouter({
               children: [
                 {
                   path: '/edu/department/list',
+                  meta: { title: '专业列表' },
                   component: () =>
                     import('@/views/Edu/Department/DepartmentList.vue')
                 },
                 {
                   path: '/edu/department/edit',
+                  meta: { title: '专业编辑' },
                   component: () =>
                     import('@/views/Edu/Department/DepartmentEdit.vue')
                 }
@@ -174,10 +211,12 @@ const router = createRouter({
               children: [
                 {
                   path: '/edu/class/list',
+                  meta: { title: '班级列表' },
                   component: () => import('@/views/Edu/Class/ClassList.vue')
                 },
                 {
                   path: '/edu/class/edit',
+                  meta: { title: '班级编辑' },
                   component: () => import('@/views/Edu/Class/ClassEdit.vue')
                 }
               ]
