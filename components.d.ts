@@ -30,6 +30,7 @@ declare module 'vue' {
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTag: typeof import('element-plus/es')['ElTag']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     'IEp-Menu': typeof import('~icons/ep/-menu')['default']
     IEpCollectionTag: typeof import('~icons/ep/collection-tag')['default']
     IEpDiscount: typeof import('~icons/ep/discount')['default']
