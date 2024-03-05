@@ -2,6 +2,13 @@ html.dark {
     .el-menu {
         background-color: transparent !important;
       }
+      .home-panel-right{
+        color: #aeaeae !important;
+        .home-panel-title {
+          color: #e5eaf3 !important;
+        }
+      }
+
       ::-webkit-scrollbar-thumb{
         background-color: #323232;
         &:hover{
