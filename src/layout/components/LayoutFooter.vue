@@ -36,9 +36,12 @@
         </a>
       </el-tooltip>
     </div>
-    <a href="https://beian.miit.gov.cn" class="beian" target="_blank">
-      粤ICP备2023073501号
-    </a>
+    <div class="beian">
+      <a href="https://beian.miit.gov.cn" target="_blank">
+        粤ICP备2023073501号
+      </a>
+    </div>
+    <div style="flex: 1"></div>
   </div>
 </template>
 
@@ -48,21 +51,34 @@
   border-top: 1px solid var(--el-border-color);
   padding: 0.625rem 1.25rem;
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
   font-size: 0.875rem;
   .lianxi {
     display: flex;
-    justify-content: center;
-  }
-  .font {
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: all 0.3s;
+    flex: 1;
+    justify-content: flex-start;
+    .font {
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      fill: #cac9c9;
+      &:hover {
+        fill: #fcfcfc;
+      }
+    }
   }
   .beian {
-    color: #cac9c9;
+    flex: 1;
+    text-align: center;
+    a {
+      transition: all 0.2s ease-in-out;
+      color: #cac9c9;
+
+      &:hover {
+        color: #409eff;
+      }
+    }
   }
 }
 </style>
