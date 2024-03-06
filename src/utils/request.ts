@@ -8,6 +8,9 @@ const instance = axios.create({
   timeout: 1000
 })
 
+/**
+ * 请求拦截
+ */
 instance.interceptors.request.use(
   (config) => {
     const t = localStorage.getItem('t')
@@ -21,6 +24,10 @@ instance.interceptors.request.use(
     Promise.reject(err)
   }
 )
+
+/**
+ * 响应拦截
+ */
 instance.interceptors.response.use(
   (res) => {
     return res
@@ -32,7 +39,11 @@ instance.interceptors.response.use(
       localStorage.removeItem('t')
       localStorage.removeItem('u')
     }
-    ElMessage.error(err.response.data.message || '服务异常')
+    //@ts-ignore
+    ElMessage({
+      type: 'error',
+      message: err.response.data.message || '服务异常'
+    })
     Promise.reject(err)
   }
 )

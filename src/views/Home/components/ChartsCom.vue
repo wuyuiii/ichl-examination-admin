@@ -11,17 +11,7 @@ import { UniversalTransition } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
 import { onMounted } from 'vue'
 import { getChartsDataAPI } from '@/api/home'
-
-interface ItemData {
-  name: string
-  value: string
-}
-
-interface ChartsData {
-  userData: Array<ItemData>
-  questionData: Array<ItemData>
-  days: Array<number>
-}
+import type { ChartsData } from '@/interface/chartsCom'
 
 echarts.use([
   GridComponent,
