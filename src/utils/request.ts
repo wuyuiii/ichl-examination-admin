@@ -16,6 +16,7 @@ instance.interceptors.request.use(
     const t = localStorage.getItem('t')
     if (t) {
       config.headers.setAuthorization(`Bearer ${t}`)
+      config.headers.set('uid-custom-header', localStorage.getItem('uid'))
     }
 
     return config

@@ -5,13 +5,9 @@ import request from '@/utils/request'
  * @returns
  */
 export const getCardDataAPI = () => {
-  return request.get('/home/cardData', {
-    headers: { 'uid-custom-header': localStorage.getItem('uid') }
-  })
+  return request.get('/home/cardData')
 }
 
 export const getChartsDataAPI = () => {
-  return request.get('/home/chartsData', {
-    headers: { 'uid-custom-header': localStorage.getItem('uid') }
-  })
+  return request.get('/home/chartsData')
 }
