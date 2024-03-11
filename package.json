@@ -18,12 +18,13 @@
     "@element-plus/icons-vue": "^2.3.1",
     "@vueuse/core": "^10.9.0",
     "axios": "^1.6.7",
+    "dayjs": "^1.11.10",
     "echarts": "^5.5.0",
-    "element-plus": "^2.5.5",
+    "element-plus": "^2.6.1",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
     "sass": "^1.70.0",
-    "vue": "^3.4.15",
+    "vue": "^3.4.21",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {

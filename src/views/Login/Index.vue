@@ -3,13 +3,13 @@ import { Lock, User } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { loginAPI } from '@/api/login'
-import type { LoginData } from '@/interface/api'
+import type { LoginDataType } from '@/interface/api'
 import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 const loginLoading = ref(false)
 const loginRef = ref()
-const loginData = ref<LoginData>({
+const loginData = ref<LoginDataType>({
   user_name: '',
   password: ''
 })
@@ -100,3 +100,4 @@ const login = async () => {
   }
 }
 </style>
+@/interface/modules/api

@@ -31,6 +31,16 @@ instance.interceptors.request.use(
  */
 instance.interceptors.response.use(
   (res) => {
+    if (res.data.status === 401) {
+      router.push('/login')
+      localStorage.removeItem('uid')
+      localStorage.removeItem('t')
+      localStorage.removeItem('u')
+      ElMessage({
+        type: 'error',
+        message: res.data.message || '服务异常'
+      })
+    }
     return res
   },
   (err) => {

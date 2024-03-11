@@ -8,8 +8,8 @@ import {
 } from 'vue-router'
 import { ArrowRight, ArrowDown, Moon, Sunny } from '@element-plus/icons-vue'
 import { useOptionStore } from '@/stores'
+import type { TagBar } from '@/interface'
 const optionStore = useOptionStore()
-// const tabBarStore = useTabBarStore()
 const route = useRoute()
 const router = useRouter()
 
@@ -28,12 +28,6 @@ onMounted(() => {
   getBreadcrumb()
 })
 
-// 面包屑
-interface TagBar {
-  current: any
-  back: any
-  items: RouteLocationMatched
-}
 const breadList = ref<RouteLocationMatched[]>([]) // 路由集合
 const getBreadcrumb = () => {
   // 通过路由元信息和route.matched数组筛选，将需要显示到面包屑的路由添加到数组中
@@ -60,10 +54,10 @@ const getBreadcrumb = () => {
  *    找得到就直接跳转到当前项的上一次访问路径
  *  4.4 如果数组为空时直接跳转首页
  */
-const tagBar = ref<TagBar[]>([]) // tag导航
+
 const addSelectTag = (items: RouteLocationMatched, history: HistoryState) => {
   // 如果tag数组中重复则不添加，否则添加路由信息
-  if (tagBar.value.some((item) => item.items.path === items.path)) {
+  if (optionStore.tagBar.some((item) => item.items.path === items.path)) {
     return
   }
   const historyItem: TagBar = {
@@ -71,25 +65,29 @@ const addSelectTag = (items: RouteLocationMatched, history: HistoryState) => {
     back: history.back,
     items
   }
-  tagBar.value.push(historyItem)
+  optionStore.tagBar.push(historyItem)
 }
 const closeTag = (item: TagBar) => {
-  const index = tagBar.value.findIndex((i) => i.items.path === item.items.path)
-  tagBar.value.splice(index, 1)
-  if (item.items.path !== route.fullPath) {
+  const index = optionStore.tagBar.findIndex(
+    (i) => i.items.path === item.items.path
+  )
+  optionStore.tagBar.splice(index, 1)
+  if (item.items.path !== route.path) {
     return
   }
-  if (tagBar.value.length == 0) {
+  if (optionStore.tagBar.length == 0) {
     return router.replace('/')
   }
-  if (tagBar.value.findIndex((i) => item.back === i.current) === -1) {
-    return router.push(tagBar.value[tagBar.value.length - 1].current)
+  if (optionStore.tagBar.findIndex((i) => item.back === i.current) === -1) {
+    return router.push(
+      optionStore.tagBar[optionStore.tagBar.length - 1].current
+    )
   }
   return router.push(item.back)
 }
 const selectTag = (item: TagBar) => {
-  item.back = route.fullPath
-  router.push(item.items.path)
+  item.back = route.path
+  router.push(item.current)
 }
 
 // 横向滚动
@@ -162,10 +160,10 @@ const handleScroll = (e: any) => {
       >
         <div class="header-bottom-item">
           <el-tag
-            v-for="item in tagBar"
+            v-for="item in optionStore.tagBar"
             :key="item.items.path"
             closable
-            :effect="$route.fullPath === item.items?.path ? 'dark' : 'light'"
+            :effect="$route.path === item.items?.path ? 'dark' : 'light'"
             @click="selectTag(item)"
             @close="closeTag(item)"
             >{{ item.items.meta.title }}</el-tag
@@ -268,3 +266,4 @@ const handleScroll = (e: any) => {
   }
 }
 </style>
+@/interface/modules/header

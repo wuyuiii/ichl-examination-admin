@@ -148,3 +148,4 @@ onMounted(() => {
   }
 }
 </style>
+@/interface/modules/chartsCom

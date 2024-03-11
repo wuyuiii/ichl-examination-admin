@@ -23,15 +23,18 @@ const router = createRouter({
               children: [
                 {
                   path: '/user/student/list',
-                  name: '/user/student/list',
-                  meta: { title: '学生列表' },
-                  component: () => import('@/views/User/StudentList.vue')
+                  meta: { title: '学生列表', role: 1 },
+                  component: () => import('@/views/User/index.vue')
                 },
                 {
                   path: '/user/student/edit',
-                  name: '/user/student/edit',
-                  meta: { title: '学生创编' },
-                  component: () => import('@/views/User/StudentList.vue')
+                  meta: { title: '学生创编', role: 1 },
+                  component: () => import('@/views/User/userEdit.vue')
+                },
+                {
+                  path: '/user/student/log',
+                  meta: { title: '学生操作日志', role: 1 },
+                  component: () => import('@/views/User/userLog.vue')
                 }
               ]
             },
@@ -41,15 +44,13 @@ const router = createRouter({
               children: [
                 {
                   path: '/user/teacher/list',
-                  name: '/user/teacher/list',
-                  meta: { title: '教师列表' },
-                  component: () => import('@/views/User/TeacherList.vue')
+                  meta: { title: '教师列表', role: 2 },
+                  component: () => import('@/views/User/index.vue')
                 },
                 {
                   path: '/user/teacher/edit',
-                  name: '/user/teacher/edit',
-                  meta: { title: '教师创编' },
-                  component: () => import('@/views/User/StudentList.vue')
+                  meta: { title: '教师创编', role: 2 },
+                  component: () => import('@/views/User/userEdit.vue')
                 }
               ]
             },
@@ -59,15 +60,13 @@ const router = createRouter({
               children: [
                 {
                   path: '/user/admin/list',
-                  name: '/user/admin/list',
-                  meta: { title: '管理员列表' },
-                  component: () => import('@/views/User/AdminList.vue')
+                  meta: { title: '管理员列表', role: 3 },
+                  component: () => import('@/views/User/index.vue')
                 },
                 {
                   path: '/user/admin/edit',
-                  name: '/user/admin/edit',
-                  meta: { title: '管理员创编' },
-                  component: () => import('@/views/User/StudentList.vue')
+                  meta: { title: '管理员创编', role: 3 },
+                  component: () => import('@/views/User/userEdit.vue')
                 }
               ]
             }

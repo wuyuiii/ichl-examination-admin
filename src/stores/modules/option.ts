@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import type { TagBar } from '@/interface/modules/header'
 
 export const useOptionStore = defineStore(
   'option',
@@ -19,15 +20,20 @@ export const useOptionStore = defineStore(
       languageSwitch.value = val
     }
 
+    // tag导航
+    const tagBar = ref<TagBar[]>([])
     return {
       isCollapse,
       handleCollapse,
       themeSwitch,
       languageSwitch,
-      handleLanguageSwitch
+      handleLanguageSwitch,
+      tagBar
     }
   },
   {
-    persist: {}
+    persist: {
+      paths: ['isCollapse', 'themeSwitch', 'languageSwitch']
+    }
   }
 )
