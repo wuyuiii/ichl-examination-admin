@@ -62,10 +62,8 @@ const checkLog = (row: StuListType) => {
 
 // 删除
 const remove = async (row: StuListType) => {
-  ElMessageBox.confirm(`是否删除学生${row.real_name}`, '删除学生', {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    type: 'warning'
+  ElMessageBox.confirm(`是否删除学生：${row.real_name}`, '删除学生', {
+    type: 'error'
   }).then(async () => {
     const { data: res } = await delStuAPI(row.id)
     if (res.status === 200) {
@@ -117,7 +115,7 @@ const search = () => {
       <el-input
         class="user-search-input"
         v-model="userListParams.real_name"
-        placeholder="请输入姓名"
+        placeholder="输入姓名查询"
         :prefix-icon="Search"
         @change="search"
       ></el-input>
@@ -129,7 +127,7 @@ const search = () => {
       style="width: 100%; margin-bottom: 1.875rem"
       border
     >
-      <el-table-column prop="id" label="id" width="60px" />
+      <el-table-column prop="id" label="ID" width="60px" />
       <el-table-column prop="user_name" label="用户名" />
       <el-table-column prop="real_name" label="真实姓名" width="100px" />
       <el-table-column prop="phone" label="手机号" />

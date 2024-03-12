@@ -24,3 +24,9 @@ export interface UserLogListType {
   pageSize: number
   id: number
 }
+
+export interface SubjectListType {
+  pageIndex: number
+  pageSize: number
+  keyword: string
+}

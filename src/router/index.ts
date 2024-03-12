@@ -24,7 +24,7 @@ const router = createRouter({
                 {
                   path: '/user/student/list',
                   meta: { title: '学生列表', role: 1 },
-                  component: () => import('@/views/User/index.vue')
+                  component: () => import('@/views/User/userList.vue')
                 },
                 {
                   path: '/user/student/edit',
@@ -45,7 +45,7 @@ const router = createRouter({
                 {
                   path: '/user/teacher/list',
                   meta: { title: '教师列表', role: 2 },
-                  component: () => import('@/views/User/index.vue')
+                  component: () => import('@/views/User/userList.vue')
                 },
                 {
                   path: '/user/teacher/edit',
@@ -61,7 +61,7 @@ const router = createRouter({
                 {
                   path: '/user/admin/list',
                   meta: { title: '管理员列表', role: 3 },
-                  component: () => import('@/views/User/index.vue')
+                  component: () => import('@/views/User/userList.vue')
                 },
                 {
                   path: '/user/admin/edit',

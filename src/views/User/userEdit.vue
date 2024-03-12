@@ -116,7 +116,7 @@ getEduOption()
     <el-form
       :model="editFormData"
       :rules="editFormRules"
-      label-width="140px"
+      label-width="8.75rem"
       ref="editFormRef"
     >
       <el-form-item prop="user_name">
