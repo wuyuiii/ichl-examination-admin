@@ -2,12 +2,21 @@ import type { SubjectDataType, SubjectListType } from '@/interface'
 import request from '@/utils/request'
 
 /**
- * 获取学科列表
+ * 获取学科列表(分页、查询)
  * @param data
  * @returns
  */
 export const getSubjectListAPI = (data: SubjectListType) => {
   return request.get('/subject/getSubListAdmin', { params: data })
+}
+
+/**
+ * 获取学科列表
+ * @param data
+ * @returns
+ */
+export const getSubjectListAPI2 = () => {
+  return request.get('/subject/getSubList')
 }
 
 /**

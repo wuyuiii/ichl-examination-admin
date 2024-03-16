@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { TagBar } from '@/interface/modules/header'
+import type { TagBar } from '@/interface'
 
 export const useOptionStore = defineStore(
   'option',

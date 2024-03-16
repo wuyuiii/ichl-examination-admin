@@ -102,11 +102,6 @@ const handleCurrentChange = (value: number) => {
   userListParams.value.pageIndex = value
   getUserList()
 }
-
-// 用户名搜索
-const search = () => {
-  getUserList()
-}
 </script>
 
 <template>
@@ -117,7 +112,7 @@ const search = () => {
         v-model="userListParams.real_name"
         placeholder="输入姓名查询"
         :prefix-icon="Search"
-        @change="search"
+        @change="getUserList"
       ></el-input>
       <el-button type="primary" @click="edit">添加</el-button>
     </div>

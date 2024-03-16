@@ -3,8 +3,9 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { SubjectDataType } from '@/interface'
 import { addSubjectAPI, getSubjectAPI, updateSubjectAPI } from '@/api/subject'
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { useOptionStore } from '@/stores'
+import type { FormInstance, FormRules } from 'element-plus/lib/components'
 
 const route = useRoute()
 const router = useRouter()

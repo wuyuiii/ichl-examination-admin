@@ -30,3 +30,20 @@ export interface SubjectListType {
   pageSize: number
   keyword: string
 }
+
+export interface paperListType {
+  pageIndex: number
+  pageSize: number
+  keyword: string
+  id: number
+  paperType: string
+  subjectId: string
+}
+
+export interface QuestionListType {
+  pageIndex: number
+  pageSize: number
+  keyword: string
+  questionType: string
+  subjectId: string
+}

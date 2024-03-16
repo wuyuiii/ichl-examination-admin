@@ -1,3 +1,22 @@
+export interface User {
+  age?: number
+  birth_day?: string
+  create_time?: string
+  gender?: number
+  id?: number
+  image_path?: string
+  password?: string
+  phone?: string
+  real_name?: string
+  role?: number
+  status?: number
+  user_class_id?: null
+  user_college_id?: null
+  user_department_id?: null
+  user_name?: string
+  user_uuid?: string
+}
+
 export interface StuListType {
   id: number
   user_name: string

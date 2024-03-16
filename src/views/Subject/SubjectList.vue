@@ -13,7 +13,7 @@ const route = useRoute()
 const router = useRouter()
 
 const optionStore = useOptionStore()
-const subjectData = ref([])
+const subjectData = ref<SubjectDataType[]>([])
 const total = ref(0)
 const loading = ref(false)
 const subjectListParams = ref<SubjectListType>({
@@ -31,11 +31,6 @@ const getSubjectList = async () => {
   }
 }
 getSubjectList()
-
-// 搜索学科
-const search = () => {
-  getSubjectList()
-}
 
 // 学科创编
 const edit = (row: SubjectDataType) => {
@@ -95,7 +90,7 @@ const handleCurrentChange = (value: number) => {
         v-model="subjectListParams.keyword"
         placeholder="输入学科查询"
         :prefix-icon="Search"
-        @change="search"
+        @change="getSubjectList"
       ></el-input>
       <el-button type="primary" @click="edit">添加</el-button>
     </div>

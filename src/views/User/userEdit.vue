@@ -1,11 +1,15 @@
 <script lang="ts" setup>
 import { getEduOptionAPI } from '@/api/edu'
 import type { EditDataType, CascaderOptionType } from '@/interface'
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { addUserInfoAPI, updateUserInfoAPI, getUserInfoAPI } from '@/api/user'
 import { useOptionStore } from '@/stores'
+import type {
+  FormInstance,
+  FormRules
+} from 'element-plus/lib/components/index.js'
 
 const route = useRoute()
 const router = useRouter()

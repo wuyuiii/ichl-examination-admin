@@ -3,10 +3,13 @@ import { Lock, User } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { loginAPI } from '@/api/login'
-import type { LoginDataType } from '@/interface/api'
+import type { LoginDataType } from '@/interface'
 import { ElMessage } from 'element-plus'
+import { useUserStore } from '@/stores'
 
 const router = useRouter()
+const userStore = useUserStore()
+
 const loginLoading = ref(false)
 const loginRef = ref()
 const loginData = ref<LoginDataType>({
@@ -24,6 +27,7 @@ const login = async () => {
     loginLoading.value = true
     const { data: res } = await loginAPI(loginData.value)
     if (res.status === 201) {
+      userStore.setUserData(res.user)
       localStorage.setItem('t', res.token)
       localStorage.setItem('uid', res.uid)
       //@ts-ignore
