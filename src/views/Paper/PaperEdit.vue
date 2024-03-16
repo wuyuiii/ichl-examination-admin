@@ -16,6 +16,7 @@ import type { QuestionItemType } from '@/interface'
 import { getQuestionListAPI } from '@/api/question'
 import { Search } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus/lib/components'
+import ShowQuestion from '@/views/Question/components/ShowQuestion.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -81,6 +82,7 @@ const addTitle = () => {
 
 // 添加题目
 const titleIndex = ref(0)
+const questionIndex = ref(0)
 const addQuestion = (index: number) => {
   dialogVisible.value = true
   titleIndex.value = index
@@ -127,7 +129,7 @@ const questionData = ref<QuestionItemType[]>([])
 const total = ref(0)
 const questionListData = ref<QuestionListType>({
   pageIndex: 1,
-  pageSize: 5,
+  pageSize: 10,
   keyword: '',
   subjectId: '',
   questionType: ''
@@ -140,6 +142,15 @@ const getQuestionList = async () => {
   }
 }
 
+// 选择题目
+const confirmSelectQuestion = () => {
+  editFormData.value.titleItems[titleIndex.value].questionItem.push(
+    ...dialogTable.value.getSelectionRows()
+  )
+  dialogTable.value.clearSelection()
+  dialogVisible.value = false
+}
+
 // 切换每页条数
 const handleSizeChange = (value: number) => {
   questionListData.value.pageSize = value
@@ -150,15 +161,6 @@ const handleSizeChange = (value: number) => {
 const handleCurrentChange = (value: number) => {
   questionListData.value.pageIndex = value
   getQuestionList()
-}
-
-// 选择题目
-const confirmSelectQuestion = () => {
-  editFormData.value.titleItems[titleIndex.value].questionItem.push(
-    ...dialogTable.value.getSelectionRows()
-  )
-  dialogTable.value.clearSelection()
-  dialogVisible.value = false
 }
 </script>
 
@@ -258,30 +260,17 @@ const confirmSelectQuestion = () => {
             shadow="never"
           >
             <el-form-item style="display: flex; justify-content: space-around">
-              <div class="paper-question-box">
-                <div class="paper-question-order">
-                  {{ index + 1 }}
-                </div>
-                <div class="paper-question-content">
-                  <span v-html="questionItem.title"></span>
-                  <div class="paper-question-content-item">
-                    <span
-                      class=""
-                      v-for="item in questionItem.items"
-                      :key="item.prefix"
+              <ShowQuestion :item="questionItem" :index="index">
+                <template #right>
+                  <div class="paper-question-del">
+                    <el-button
+                      type="danger"
+                      @click="titleItems.questionItem.splice(index, 1)"
+                      >删除</el-button
                     >
-                      {{ item.prefix }} . {{ item.content }}
-                    </span>
                   </div>
-                </div>
-                <div class="paper-question-del">
-                  <el-button
-                    type="danger"
-                    @click="titleItems.questionItem.splice(index, 1)"
-                    >删除</el-button
-                  >
-                </div>
-              </div>
+                </template>
+              </ShowQuestion>
             </el-form-item>
           </el-card>
         </el-scrollbar>
@@ -361,7 +350,7 @@ const confirmSelectQuestion = () => {
       </el-table-column>
     </el-table>
     <el-pagination
-      :page-sizes="[5, 10, 15]"
+      :page-sizes="[10, 15, 20]"
       background
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
@@ -392,37 +381,6 @@ const confirmSelectQuestion = () => {
       .paper-title-card {
         width: 100%;
         margin-bottom: 0.625rem;
-
-        .paper-question-box {
-          display: flex;
-          justify-content: space-around;
-
-          .paper-question-order {
-            flex: 1;
-            margin-right: 2.5rem;
-          }
-
-          .paper-question-content {
-            display: flex;
-            flex-direction: column;
-            align-content: flex-start;
-            flex: 20;
-            margin-right: 2.5rem;
-
-            .paper-question-content-item {
-              padding-left: 1.25rem;
-
-              span {
-                margin: 0.25rem 1rem;
-              }
-            }
-          }
-
-          .paper-question-del {
-            flex: 1;
-            margin-right: 2.5rem;
-          }
-        }
       }
     }
   }
