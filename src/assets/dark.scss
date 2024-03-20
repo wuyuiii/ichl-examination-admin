@@ -1,18 +1,31 @@
 html.dark {
-    .el-menu {
-        background-color: transparent !important;
-      }
-      .home-panel-right{
-        color: #aeaeae !important;
-        .home-panel-title {
-          color: #e5eaf3 !important;
-        }
-      }
+  --w-e-textarea-bg-color: #141414;
+  --w-e-toolbar-bg-color: #141414;
+  --w-e-toolbar-active-bg-color: #757474;
+  --w-e-textarea-color: #fff;
+  --w-e-toolbar-color: var(--el-text-color-regular);
+  .w-e-bar-divider {
+    background-color: var(--el-border-color);
+  }
+  .w-e-bar-item button:hover {
+    background-color: transparent;
+    color: var(--el-color-primary);
+  }
 
-      ::-webkit-scrollbar-thumb{
-        background-color: #323232;
-        &:hover{
-          background-color: #4d4c4c;
-        }
-      }
+  .el-menu {
+    background-color: transparent !important;
+  }
+  .home-panel-right {
+    color: #aeaeae !important;
+    .home-panel-title {
+      color: #e5eaf3 !important;
+    }
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #323232;
+    &:hover {
+      background-color: #4d4c4c;
+    }
+  }
 }

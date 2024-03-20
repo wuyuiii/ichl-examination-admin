@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getQuestionListAPI } from '@/api/question'
+import { delQuestionAPI, getQuestionListAPI } from '@/api/question'
 import { getSubjectListAPI2 } from '@/api/subject'
 import type {
   QuestionItemType,
@@ -8,7 +8,15 @@ import type {
 } from '@/interface'
 import { formatDate } from '@/utils/format'
 import { Search } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
+import ShowQuestion from './components/ShowQuestion.vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { useOptionStore } from '@/stores'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
+const optionStore = useOptionStore()
 
 const subjectData = ref<SubjectDataType[]>([])
 // 获取学科列表
@@ -50,6 +58,70 @@ const handleCurrentChange = (value: number) => {
   questionListData.value.pageIndex = value
   getQuestionList()
 }
+
+const showQues = ref()
+const show = (row: QuestionItemType) => {
+  dialogVisible.value = true
+  nextTick(() => {
+    showQues.value.questionItem = row
+  })
+}
+const edit = (row: QuestionItemType) => {
+  console.log(route.matched)
+  let questionType = ''
+  switch (row.question_type) {
+    case 1:
+      questionType = 'singleChoice'
+      break
+    case 2:
+      questionType = 'multipleChoice'
+      break
+    case 3:
+      questionType = 'trueFalse'
+      break
+    case 4:
+      questionType = 'gapFilling'
+      break
+    case 5:
+      questionType = 'shortAnswer'
+      break
+  }
+  const index = optionStore.tagBar.findIndex(
+    (item) => item.items.path == `${route.matched[1].path}/edit/${questionType}`
+  )
+  if (index !== -1) {
+    optionStore.tagBar[index].current = row.id
+      ? `${route.matched[1].path}/edit/${questionType}?id=${row.id}`
+      : `${route.matched[1].path}/edit/${questionType}`
+  }
+  router.push({
+    path: `${route.matched[1].path}/edit/${questionType}`,
+    query: { id: row.id }
+  })
+}
+const remove = (row: QuestionItemType) => {
+  ElMessageBox.confirm(`是否删除题目：${row.title}`, '删除题目', {
+    type: 'error',
+    dangerouslyUseHTMLString: true
+  }).then(async () => {
+    const { data: res } = await delQuestionAPI(row.id as any)
+    if (res.status === 200) {
+      ElMessage({
+        type: 'success',
+        message: res.message
+      })
+      getQuestionList()
+    } else {
+      ElMessage({
+        type: 'error',
+        message: res.message
+      })
+    }
+  })
+}
+
+// dialog
+const dialogVisible = ref(false)
 </script>
 
 <template>
@@ -58,7 +130,7 @@ const handleCurrentChange = (value: number) => {
       <el-input
         class="questionList-search-input"
         v-model="questionListData.keyword"
-        placeholder="输入试卷名查询"
+        placeholder="输入题目名查询"
         :prefix-icon="Search"
         @change="getQuestionList"
       />
@@ -120,10 +192,16 @@ const handleCurrentChange = (value: number) => {
         </template>
       </el-table-column>
       <el-table-column label="操作" width="200">
-        <template #default>
-          <el-button size="small" plain type="info">预览</el-button>
-          <el-button size="small" plain type="primary">编辑</el-button>
-          <el-button size="small" plain type="danger">删除</el-button>
+        <template #default="{ row }">
+          <el-button size="small" plain type="info" @click="show(row)">
+            预览
+          </el-button>
+          <el-button size="small" plain type="primary" @click="edit(row)">
+            编辑
+          </el-button>
+          <el-button size="small" plain type="danger" @click="remove(row)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -136,6 +214,9 @@ const handleCurrentChange = (value: number) => {
       @current-change="handleCurrentChange"
     />
   </div>
+  <el-dialog v-model="dialogVisible" width="40%" style="padding: 30px">
+    <ShowQuestion ref="showQues" />
+  </el-dialog>
 </template>
 
 <style lang="scss" scoped>
@@ -143,6 +224,7 @@ const handleCurrentChange = (value: number) => {
   display: flex;
   width: 50%;
   margin-bottom: 1.25rem;
+
   .questionList-search-input {
     flex: 1;
     margin-right: 0.875rem;

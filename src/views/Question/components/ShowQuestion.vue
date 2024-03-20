@@ -1,34 +1,47 @@
 <script lang="ts" setup>
 import type { QuestionItemType } from '@/interface'
-import type { PropType } from 'vue'
+import { ref, type PropType } from 'vue'
 
-defineProps({
+const props = defineProps({
   item: {
     type: Object as PropType<QuestionItemType>,
-    required: true
+    default: () => {
+      return {
+        correct: '',
+        create_time: '',
+        create_user: '',
+        difficult: '',
+        id: '',
+        items: [],
+        question_type: '',
+        score: '',
+        subject_id: '',
+        title: ''
+      }
+    }
   },
   index: {
     type: Number,
-    required: true
+    default: 0
   }
+})
+const questionItem = ref(props.item)
+defineExpose({
+  questionItem
 })
 </script>
 
 <template>
   <div class="showQuestion-container">
     <div class="showQuestion-box">
-      <div class="showQuestion-order">
-        {{ index + 1 }}
+      <div class="showQuestion-order" v-if="index">
+        {{ index }}
       </div>
       <div class="showQuestion-content">
-        <span v-html="item.title"></span>
+        <span v-html="questionItem.title" style="margin-bottom: 20px"></span>
         <div class="showQuestion-content-item">
-          <span
-            class=""
-            v-for="questionItem in item.items"
-            :key="questionItem.prefix"
-          >
-            {{ questionItem.prefix }} . {{ questionItem.content }}
+          <span class="" v-for="item in questionItem.items" :key="item.prefix">
+            {{ item.prefix }} . {{ item.content }}
           </span>
         </div>
       </div>

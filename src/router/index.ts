@@ -118,30 +118,30 @@ const router = createRouter({
               children: [
                 {
                   path: '/question/edit/singleChoice',
-                  meta: { title: '单选题创编' },
+                  meta: { title: '单选题创编', question_type: 1 },
                   component: () =>
                     import('@/views/Question/Edit/singleChoice.vue')
                 },
                 {
                   path: '/question/edit/multipleChoice',
-                  meta: { title: '多选题创编' },
+                  meta: { title: '多选题创编', question_type: 2 },
                   component: () =>
                     import('@/views/Question/Edit/multipleChoice.vue')
                 },
                 {
                   path: '/question/edit/trueFalse',
-                  meta: { title: '判断题创编' },
+                  meta: { title: '判断题创编', question_type: 3 },
                   component: () => import('@/views/Question/Edit/trueFalse.vue')
                 },
                 {
                   path: '/question/edit/gapFilling',
-                  meta: { title: '填空题创编' },
+                  meta: { title: '填空题创编', question_type: 4 },
                   component: () =>
                     import('@/views/Question/Edit/gapFilling.vue')
                 },
                 {
                   path: '/question/edit/shortAnswer',
-                  meta: { title: '简答题创编' },
+                  meta: { title: '简答题创编', question_type: 5 },
                   component: () =>
                     import('@/views/Question/Edit/shortAnswer.vue')
                 }

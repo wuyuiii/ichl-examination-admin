@@ -42,7 +42,6 @@ const editFormRules: FormRules = {
   titleItems: [{ required: true, message: '1', trigger: 'change' }]
 }
 
-const subjectData = ref<SubjectDataType[]>([])
 const getPaper = async () => {
   const { data: res } = await getPaperAPI(route.query.id as any)
   if (res.status === 200) {
@@ -54,6 +53,7 @@ if (route.query.id) {
 }
 
 // 获取学科列表
+const subjectData = ref<SubjectDataType[]>([])
 const getSubjectList = async () => {
   const { data: res } = await getSubjectListAPI2()
   if (res.status === 200) {
@@ -260,7 +260,7 @@ const handleCurrentChange = (value: number) => {
             shadow="never"
           >
             <el-form-item style="display: flex; justify-content: space-around">
-              <ShowQuestion :item="questionItem" :index="index">
+              <ShowQuestion :item="questionItem" :index="index + 1">
                 <template #right>
                   <div class="paper-question-del">
                     <el-button
