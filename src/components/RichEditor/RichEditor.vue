@@ -14,6 +14,7 @@ const props = defineProps({
 
 const formValue = ref<CreateQuestionType>(props.form)
 
+// 监听 title 变化，判断填空元素个数，生成填空答案选项
 watch(
   () => formValue.value.title,
   (newV) => {
@@ -50,10 +51,6 @@ onBeforeUnmount(() => {
 
 const handleCreated = (editor: any) => {
   editorRef.value = editor // 记录 editor 实例，重要！
-}
-
-const handleChange = () => {
-  console.log(editorRef.value.getHtml())
 }
 </script>
 
