@@ -62,7 +62,7 @@ const checkLog = (row: StuListType) => {
 
 // 删除
 const remove = async (row: StuListType) => {
-  ElMessageBox.confirm(`是否删除学生：${row.real_name}`, '删除学生', {
+  ElMessageBox.confirm(`是否删除用户：${row.real_name}`, '删除用户', {
     type: 'error'
   }).then(async () => {
     const { data: res } = await delStuAPI(row.id)

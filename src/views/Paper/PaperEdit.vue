@@ -82,7 +82,6 @@ const addTitle = () => {
 
 // 添加题目
 const titleIndex = ref(0)
-const questionIndex = ref(0)
 const addQuestion = (index: number) => {
   dialogVisible.value = true
   titleIndex.value = index

@@ -76,7 +76,7 @@ const reset = () => {
     >
       <el-form-item prop="name">
         <template #label>
-          <div class="label">学科</div>
+          <div class="label">学科:</div>
         </template>
         <el-input
           v-model="editFormData.name"

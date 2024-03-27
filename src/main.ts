@@ -11,6 +11,7 @@ import 'element-plus/es/components/message-box/style/css'
 import '@/assets/main.scss'
 import '@/assets/dark.scss'
 import '@/assets/font.js'
+import { scrollLoadMore } from '@/directives/selectScroll'
 
 const app = createApp(App)
 
@@ -18,3 +19,4 @@ app.use(router)
 app.use(pinia)
 
 app.mount('#app')
+scrollLoadMore(app)

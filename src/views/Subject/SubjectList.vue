@@ -15,7 +15,7 @@ const router = useRouter()
 const optionStore = useOptionStore()
 const subjectData = ref<SubjectDataType[]>([])
 const total = ref(0)
-const loading = ref(false)
+const loading = ref(true)
 const subjectListParams = ref<SubjectListType>({
   pageIndex: 1,
   pageSize: 10,
@@ -26,6 +26,7 @@ const subjectListParams = ref<SubjectListType>({
 const getSubjectList = async () => {
   const { data: res } = await getSubjectListAPI(subjectListParams.value)
   if (res.status === 200) {
+    loading.value = false
     subjectData.value = res.data
     total.value = res.total
   }

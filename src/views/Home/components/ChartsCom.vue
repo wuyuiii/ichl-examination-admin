@@ -11,7 +11,7 @@ import { UniversalTransition } from 'echarts/features'
 import { CanvasRenderer } from 'echarts/renderers'
 import { onMounted } from 'vue'
 import { getChartsDataAPI } from '@/api/home'
-import type { ChartsData } from '@/interface/chartsCom'
+import type { ChartsData, ItemData } from '@/interface'
 
 echarts.use([
   GridComponent,
@@ -36,7 +36,7 @@ const getChartsData = async () => {
 // 数据处理
 const handleChartsData = (data: ChartsData) => {
   // 补全 userData
-  data.days.forEach((day) => {
+  data.days.forEach((day: number) => {
     if (day <= new Date().getDate()) {
       const found = data.userData.find((item) => parseInt(item.name) === day)
       if (!found) {
@@ -44,19 +44,24 @@ const handleChartsData = (data: ChartsData) => {
       }
     }
   })
-  data.userData.sort((a, b) => parseInt(a.name) - parseInt(b.name))
+
+  data.userData.sort(
+    (a: ItemData, b: ItemData) => parseInt(a.name) - parseInt(b.name)
+  )
 
   // 补全 questionData
-  const allMonths = Array.from({ length: new Date().getMonth() }, (_, i) =>
+  const allMonths = Array.from({ length: new Date().getMonth() - 1 }, (_, i) =>
     String(i + 2).padStart(2, '0')
   )
-  data.questionData.sort((a, b) => parseInt(a.name) - parseInt(b.name)) // 按月份排序
-  allMonths.forEach((month) => {
-    const found = data.questionData.find((item) => item.name === month)
+  allMonths.forEach((month: string) => {
+    const found = data.questionData.find(
+      (item: ItemData) => item.name === month
+    )
     if (!found) {
       data.questionData.push({ name: `${+month}月`, value: '0' })
     }
   })
+  data.questionData.sort((a, b) => parseInt(a.name) - parseInt(b.name)) // 按月份排序
 
   getCharts(data)
 }

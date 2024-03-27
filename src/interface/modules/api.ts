@@ -47,3 +47,26 @@ export interface QuestionListType {
   questionType: string
   subjectId: string
 }
+
+export interface MessageListType {
+  pageIndex: number
+  pageSize: number
+  keyword: string
+}
+
+export interface CollegeListType extends MessageListType {}
+
+export interface DepartmentListType extends CollegeListType {
+  college_id?: string
+}
+
+export interface ClassListType extends DepartmentListType {
+  department_id: string
+}
+
+export interface GetClassStudentType {
+  pageIndex: number
+  pageSize: number
+  classId: number | null
+  real_name: string
+}
