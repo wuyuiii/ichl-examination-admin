@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useOptionStore } from '@/stores'
+import { Tickets } from '@element-plus/icons-vue'
 import { useRouter, useRoute } from 'vue-router'
 const optionStore = useOptionStore()
 const router = useRouter()
@@ -94,11 +95,21 @@ const backHome = () => {
         </template>
         <el-menu-item-group title="教务管理">
           <el-menu-item index="/edu/college/list">学院列表</el-menu-item>
-          <el-menu-item index="/edu/college/edit">学院创建</el-menu-item>
+          <!-- <el-menu-item index="/edu/college/edit">学院创建</el-menu-item> -->
           <el-menu-item index="/edu/department/list">专业列表</el-menu-item>
-          <el-menu-item index="/edu/department/edit">专业创建</el-menu-item>
+          <!-- <el-menu-item index="/edu/department/edit">专业创建</el-menu-item> -->
           <el-menu-item index="/edu/class/list">班级列表</el-menu-item>
-          <el-menu-item index="/edu/class/edit">班级创建</el-menu-item>
+          <!-- <el-menu-item index="/edu/class/edit">班级创建</el-menu-item> -->
+        </el-menu-item-group>
+      </el-sub-menu>
+      <el-sub-menu index="/answer">
+        <template #title>
+          <el-icon><Tickets /></el-icon>
+          <span class="title-text">答卷管理</span>
+        </template>
+        <el-menu-item-group title="答卷管理">
+          <el-menu-item index="/answer/list">答卷列表</el-menu-item>
+          <!-- <el-menu-item index="/edu/department/list">专业列表</el-menu-item> -->
         </el-menu-item-group>
       </el-sub-menu>
     </el-menu>

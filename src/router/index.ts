@@ -217,6 +217,22 @@ const router = createRouter({
               ]
             }
           ]
+        },
+        {
+          path: '/answer',
+          meta: { title: '答卷管理' },
+          children: [
+            {
+              path: '/answer/list',
+              meta: { title: '答卷列表' },
+              component: () => import('@/views/Answer/AnswerList.vue')
+            },
+            {
+              path: '/answer/judge',
+              meta: { title: '答卷批改' },
+              component: () => import('@/views/Answer/AnswerJudge.vue')
+            }
+          ]
         }
       ]
     }

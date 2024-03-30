@@ -9,7 +9,7 @@ export interface PaperDataType {
   edu: number[]
   limitDateTime: string[]
   titleItems: TitleItem[]
-  score: number | null
+  score: number
 }
 
 export interface TitleItem {

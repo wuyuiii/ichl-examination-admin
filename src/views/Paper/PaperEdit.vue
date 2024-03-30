@@ -31,7 +31,7 @@ const editFormData = ref<PaperDataType>({
   edu: [],
   limitDateTime: [],
   titleItems: [],
-  score: null
+  score: 0
 })
 const editFormRules: FormRules = {
   paperType: [{ required: true, message: '1', trigger: 'change' }],
@@ -143,11 +143,24 @@ const getQuestionList = async () => {
 
 // 选择题目
 const confirmSelectQuestion = () => {
+  const selectionQuestion = dialogTable.value.getSelectionRows()
   editFormData.value.titleItems[titleIndex.value].questionItem.push(
-    ...dialogTable.value.getSelectionRows()
+    ...selectionQuestion
   )
+  for (let i = 0; i < selectionQuestion.length; i++) {
+    editFormData.value.score += selectionQuestion[i].score
+  }
+
   dialogTable.value.clearSelection()
   dialogVisible.value = false
+}
+
+// 移除题目
+const removeQuestion = (item: QuestionItemType[], index: number) => {
+  editFormData.value.score <= 0
+    ? (editFormData.value.score = 0)
+    : (editFormData.value.score -= +item[index].score)
+  item.splice(index, 1)
 }
 
 // 切换每页条数
@@ -264,9 +277,10 @@ const handleCurrentChange = (value: number) => {
                   <div class="paper-question-del">
                     <el-button
                       type="danger"
-                      @click="titleItems.questionItem.splice(index, 1)"
-                      >删除</el-button
+                      @click="removeQuestion(titleItems.questionItem, index)"
                     >
+                      删除
+                    </el-button>
                   </div>
                 </template>
               </ShowQuestion>

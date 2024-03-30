@@ -18,7 +18,6 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useOptionStore } from '@/stores'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import ClassStudent from './components/ClassStudent.vue'
 import { formatGender } from '@/utils/format'
 
 const route = useRoute()

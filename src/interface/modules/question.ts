@@ -14,20 +14,15 @@ export interface QuestionItemType {
 export interface Item {
   content: string
   prefix: string
+  score?: number
 }
 
 export interface CreateQuestionType {
   title: string // 题干
-
   question_type: number // 题目类型 1.单选题 2.多选题 3.判断题 4.填空题 5.简答题
-
   subject_id: number | string // 学科id
-
   score: number | null // 分数
-
   items: Item[] // 题目答案数组
-
   difficult: number | null // 难度
-
   correct: string | string[] // 正确答案
 }

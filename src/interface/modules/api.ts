@@ -70,3 +70,12 @@ export interface GetClassStudentType {
   classId: number | null
   real_name: string
 }
+
+export interface GetAnswerListType {
+  pageIndex: number
+  pageSize: number
+  keyword: string
+  paperType: number | null
+  subjectId: number | null
+  status: number | null
+}
