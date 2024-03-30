@@ -1,3 +1,7 @@
+/**
+ * el-select 滚动加载指令
+ * @param app
+ */
 export const scrollLoadMore = (app: any) => {
   app.directive('loadmore', {
     mounted(el: any, binding: any, vnode: any) {

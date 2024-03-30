@@ -98,6 +98,15 @@ const handleScroll = (e: any) => {
     refScrollbar.value.wrapRef.scrollLeft - wheelDelta
   )
 }
+
+// 退出登录
+const logout = () => {
+  localStorage.removeItem('option')
+  localStorage.removeItem('uid')
+  localStorage.removeItem('t')
+  router.push('/login')
+  console.log(window.history)
+}
 </script>
 <template>
   <div class="header-container">
@@ -139,7 +148,7 @@ const handleScroll = (e: any) => {
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item> 个人中心 </el-dropdown-item>
-              <el-dropdown-item>退出</el-dropdown-item>
+              <el-dropdown-item @click="logout">退出</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
