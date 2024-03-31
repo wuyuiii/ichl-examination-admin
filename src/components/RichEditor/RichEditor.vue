@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { onBeforeUnmount, ref, shallowRef, watch, type PropType } from 'vue'
+import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import './EditorConfigClass'
 import type { CreateQuestionType } from '@/interface'
@@ -11,9 +11,7 @@ const props = defineProps({
     required: true
   }
 })
-
 const formValue = ref<CreateQuestionType>(props.form)
-
 // 监听 title 变化，判断填空元素个数，生成填空答案选项
 watch(
   () => formValue.value.title,

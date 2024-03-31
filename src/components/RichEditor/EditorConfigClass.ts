@@ -2,7 +2,7 @@ import {
   type IButtonMenu,
   type IDomEditor,
   type SlateElement,
-  type SlateDescendant,
+  // type SlateDescendant,
   Boot,
   DomEditor
 } from '@wangeditor/editor'
@@ -27,12 +27,12 @@ export class InsertGapFill implements IButtonMenu {
   width?: number | undefined
 
   // 获取菜单执行时的 value ，用不到则返回空 字符串或 false
-  getValue(editor?: IDomEditor): string | boolean {
-    return '<span style="padding:2px 10px;border-bottom:1px soild #000; color:red;">1234</span>'
+  getValue(): string | boolean {
+    return false
   }
 
   // 菜单是否需要激活（如选中加粗文本，“加粗”菜单会激活），用不到则返回 false
-  isActive(editor?: IDomEditor): boolean {
+  isActive(): boolean {
     return false
   }
 
@@ -42,7 +42,7 @@ export class InsertGapFill implements IButtonMenu {
   }
 
   // 点击菜单时触发的函数
-  exec(editor: IDomEditor, value: string | boolean) {
+  exec(editor: IDomEditor) {
     if (this.isDisabled(editor)) return
 
     // 1.填空节点结构
@@ -85,17 +85,17 @@ export class SwitchHTMLMenu implements IButtonMenu {
   }
 
   // 获取菜单执行时的 value ，用不到则返回空 字符串或 false
-  getValue(editor: IDomEditor): string | boolean {
+  getValue(): string | boolean {
     return false
   }
 
   // 菜单是否需要激活
-  isActive(editor: IDomEditor): boolean {
+  isActive(): boolean {
     return false
   }
 
   // 菜单是否需要禁用
-  isDisabled(editor: IDomEditor): boolean {
+  isDisabled(): boolean {
     return false
   }
 
@@ -170,7 +170,7 @@ function renderGapFill(
   // editor: IDomEditor
 ): VNode {
   // 获取“附件”的数据，参考上文 gapFill 数据结构
-  const { value = '' } = elem
+  const { value = '' } = elem as any
   // text = ++index
   // 填空元素 vnode
   const gapFillVnode = h(
@@ -203,9 +203,9 @@ Boot.registerRenderElem(renderElemConf)
  * @param childrenHtml 子节点的 HTML 代码，void 元素可忽略
  * @returns “附件”元素的 HTML 字符串
  */
-function attachmentToHtml(elem: SlateElement, childrenHtml: string): string {
+function attachmentToHtml(elem: SlateElement): string {
   // 获取附件元素的数据
-  const { value = '' } = elem
+  const { value = '' } = elem as any
 
   // 生成 HTML 代码
   const html = `<span

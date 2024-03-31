@@ -18,6 +18,8 @@ export interface Item {
 }
 
 export interface CreateQuestionType {
+  id?: number | null
+
   title: string // 题干
   question_type: number // 题目类型 1.单选题 2.多选题 3.判断题 4.填空题 5.简答题
   subject_id: number | string // 学科id

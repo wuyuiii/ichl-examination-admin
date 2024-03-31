@@ -8,7 +8,11 @@ import type {
 } from 'element-plus/lib/components/index.js'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { createQuestionAPI } from '@/api/question'
+import {
+  createQuestionAPI,
+  getQuestionAPI,
+  updateQuestionAPI
+} from '@/api/question'
 import { useOptionStore } from '@/stores'
 
 const route = useRoute()
@@ -24,6 +28,18 @@ const editFormData = ref<CreateQuestionType>({
   difficult: null,
   correct: ''
 })
+
+const getQuestion = async () => {
+  const { data: res } = await getQuestionAPI(route.query.id as any)
+  if (res.status === 200) {
+    editFormData.value = res.data
+  } else {
+    ElMessage.error(res.message)
+  }
+}
+if (route.query.id) {
+  getQuestion()
+}
 
 const editFormRules: FormRules = {
   title: [{ required: true, message: '请输入题干', trigger: 'change' }],
@@ -57,10 +73,7 @@ const submit = () => {
       if (!route.query.id) {
         res = await createQuestionAPI(editFormData.value)
       } else {
-        res = {
-          status: 1,
-          data: {}
-        }
+        res = await updateQuestionAPI(editFormData.value)
       }
       if (res.data.status === 200) {
         ElMessage({

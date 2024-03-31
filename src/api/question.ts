@@ -11,6 +11,15 @@ export const getQuestionListAPI = (data: QuestionListType) => {
 }
 
 /**
+ * 获取题目
+ * @param id
+ * @returns
+ */
+export const getQuestionAPI = (id: number) => {
+  return request.get('/question/getQuestion', { params: { id } })
+}
+
+/**
  * 创建题目
  * @param data
  * @returns
@@ -26,4 +35,13 @@ export const createQuestionAPI = (data: CreateQuestionType) => {
  */
 export const delQuestionAPI = (id: number) => {
   return request.delete('/question/delQuestion', { params: { id } })
+}
+
+/**
+ * 更新题目
+ * @param data
+ * @returns
+ */
+export const updateQuestionAPI = (data: CreateQuestionType) => {
+  return request.patch('/question/updateQuestion', data)
 }
