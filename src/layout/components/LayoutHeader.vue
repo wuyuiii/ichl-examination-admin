@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, nextTick } from 'vue'
 import {
   useRoute,
   useRouter,
@@ -55,6 +55,7 @@ const getBreadcrumb = () => {
  *  4.4 如果数组为空时直接跳转首页
  */
 
+// 添加tag
 const addSelectTag = (items: RouteLocationMatched, history: HistoryState) => {
   // 如果tag数组中重复则不添加，否则添加路由信息
   if (optionStore.tagBar.some((item) => item.items.path === items.path)) {
@@ -67,7 +68,15 @@ const addSelectTag = (items: RouteLocationMatched, history: HistoryState) => {
   }
   optionStore.tagBar.push(historyItem)
 }
-const closeTag = (item: TagBar) => {
+
+// 切换tag
+const selectTag = (item: TagBar) => {
+  item.back = route.path
+  router.push(item.current)
+}
+
+// 关闭tag
+const closeTag = (item: TagBar | any) => {
   const index = optionStore.tagBar.findIndex(
     (i) => i.items.path === item.items.path
   )
@@ -85,9 +94,37 @@ const closeTag = (item: TagBar) => {
   }
   return router.push(item.back)
 }
-const selectTag = (item: TagBar) => {
-  item.back = route.path
-  router.push(item.current)
+
+// 关闭其他tag
+const closeOtherTag = (item: TagBar | any) => {
+  if (route.fullPath !== item.current) {
+    selectTag(item)
+  }
+  optionStore.tagBar.splice(0)
+  optionStore.tagBar.push(item)
+}
+
+// 关闭左或右侧tag
+const selectTagIndex = ref(0)
+const left = ref(true)
+const right = ref(true)
+const closeLeftTag = (item: TagBar | any) => {
+  if (route.fullPath !== item.current) {
+    selectTag(item)
+  }
+  optionStore.tagBar.splice(0, selectTagIndex.value)
+}
+const closeRightTag = (item: TagBar | any) => {
+  if (route.fullPath !== item.current) {
+    selectTag(item)
+  }
+  optionStore.tagBar.splice(selectTagIndex.value + 1, optionStore.tagBar.length)
+}
+
+// 关闭全部tag
+const closeAllTag = () => {
+  optionStore.tagBar.splice(0)
+  return router.replace('/')
 }
 
 // 横向滚动
@@ -107,6 +144,55 @@ const logout = () => {
   router.push('/login')
   console.log(window.history)
 }
+
+// 打开右键菜单
+const menuVisible = ref(false)
+const menu = ref()
+const menuLeft = ref(0)
+const menuTop = ref(0)
+const selectMenuTag = ref<TagBar>()
+
+const openMenu = (item: TagBar, event: PointerEvent) => {
+  menuVisible.value = true
+  menuLeft.value = event.clientX + 10
+  menuTop.value = event.clientY
+  selectMenuTag.value = item
+
+  selectTagIndex.value = optionStore.tagBar.findIndex(
+    (tagBar) => tagBar.current === item.current
+  )
+  // 判断所选的是否为tag数组除去头尾的元素
+  if (selectTagIndex.value < optionStore.tagBar.length - 1) {
+    left.value = true
+    right.value = true
+  }
+  // 判断所选的是否为tag数组的尾元素
+  if (selectTagIndex.value === optionStore.tagBar.length - 1) {
+    left.value = true
+    right.value = false
+  }
+  // 判断所选的是否为tag数组的头元素
+  if (selectTagIndex.value === 0) {
+    left.value = false
+    right.value = true
+  }
+  // 判断所选的是否为tag数组的头元素，并且tag数组只有一个元素
+  if (selectTagIndex.value === optionStore.tagBar.length - 1) {
+    left.value = false
+    right.value = false
+  }
+}
+
+const closeMenu = () => {
+  menuVisible.value = false
+}
+watch(menuVisible, (val) => {
+  if (val) {
+    document.body.addEventListener('click', closeMenu)
+  } else {
+    document.body.removeEventListener('click', closeMenu)
+  }
+})
 </script>
 <template>
   <div class="header-container">
@@ -175,10 +261,23 @@ const logout = () => {
             :effect="$route.path === item.items?.path ? 'dark' : 'light'"
             @click="selectTag(item)"
             @close="closeTag(item)"
+            @contextmenu.prevent="openMenu(item, $event)"
             >{{ item.items.meta.title }}</el-tag
           >
         </div>
       </el-scrollbar>
+      <ul
+        v-show="menuVisible"
+        class="contextmenu"
+        ref="menu"
+        :style="{ left: `${menuLeft}px`, top: `${menuTop}px` }"
+      >
+        <li @click="closeTag(selectMenuTag)">关闭</li>
+        <li @click="closeOtherTag(selectMenuTag)">关闭其他</li>
+        <li v-show="left" @click="closeLeftTag(selectMenuTag)">关闭左侧</li>
+        <li v-show="right" @click="closeRightTag(selectMenuTag)">关闭右侧</li>
+        <li @click="closeAllTag">关闭全部</li>
+      </ul>
     </div>
   </div>
 </template>
@@ -272,7 +371,27 @@ const logout = () => {
       display: flex;
       margin-right: 1.25rem;
     }
+    .contextmenu {
+      margin: 0;
+      background-color: var(--el-bg-color-overlay);
+      z-index: 9000;
+      position: absolute;
+      list-style-type: none;
+      padding: 0.375rem 0;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--el-text-color-primary);
+      box-shadow: 0.125rem 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.3);
+      li {
+        margin: 0;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        &:hover {
+          background-color: var(--el-menu-hover-bg-color);
+        }
+      }
+    }
   }
 }
 </style>
-@/interface/modules/header

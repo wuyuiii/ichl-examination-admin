@@ -4,5 +4,5 @@ import type { RouteLocationMatched } from 'vue-router'
 export interface TagBar {
   current: any
   back: any
-  items: RouteLocationMatched
+  items: RouteLocationMatched | any
 }

@@ -62,11 +62,11 @@ export const updateUserStateAPI = (id: number) => {
 }
 
 /**
- * 获取学生操作日志
+ * 获取用户操作日志
  * @param id
  * @returns
  */
-export const getStuLogAPI = (data: UserLogListType) => {
+export const getLogListAPI = (data: UserLogListType) => {
   return request.get('/user/stuLogList', { params: data })
 }
 

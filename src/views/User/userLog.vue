@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { delStuLogAPI, getStuLogAPI } from '@/api/user'
+import { delStuLogAPI, getLogListAPI } from '@/api/user'
 import type { UserLogType, UserLogListType } from '@/interface'
 import { formatDate } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -15,7 +15,7 @@ const userLogParams = ref<UserLogListType>({
   pageSize: 10
 })
 const getStuLog = async () => {
-  const { data: res } = await getStuLogAPI(userLogParams.value)
+  const { data: res } = await getLogListAPI(userLogParams.value)
   if (res.status === 200) {
     logData.value = res.data
     total.value = res.total

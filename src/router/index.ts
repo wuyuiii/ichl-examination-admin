@@ -233,6 +233,17 @@ const router = createRouter({
               component: () => import('@/views/Answer/AnswerJudge.vue')
             }
           ]
+        },
+        {
+          path: '/log',
+          meta: { title: '日志中心' },
+          children: [
+            {
+              path: '/log/list',
+              meta: { title: '用户日志' },
+              component: () => import('@/views/Log/LogList.vue')
+            }
+          ]
         }
       ]
     }

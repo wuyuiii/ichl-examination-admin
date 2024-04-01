@@ -22,7 +22,8 @@ export interface UserListType {
 export interface UserLogListType {
   pageIndex: number
   pageSize: number
-  id: number
+  id?: number
+  keyword?: string
 }
 
 export interface SubjectListType {

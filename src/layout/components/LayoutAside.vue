@@ -109,7 +109,15 @@ const backHome = () => {
         </template>
         <el-menu-item-group title="答卷管理">
           <el-menu-item index="/answer/list">答卷列表</el-menu-item>
-          <!-- <el-menu-item index="/edu/department/list">专业列表</el-menu-item> -->
+        </el-menu-item-group>
+      </el-sub-menu>
+      <el-sub-menu index="/log">
+        <template #title>
+          <el-icon><Tickets /></el-icon>
+          <span class="title-text">日志中心</span>
+        </template>
+        <el-menu-item-group title="日志中心">
+          <el-menu-item index="/log/list">用户日志</el-menu-item>
         </el-menu-item-group>
       </el-sub-menu>
     </el-menu>
