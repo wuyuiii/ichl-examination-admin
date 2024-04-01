@@ -217,13 +217,17 @@ watch(menuVisible, (val) => {
             @change="toggleDark"
             :active-icon="Moon"
             :inactive-icon="Sunny"
-            active-color="#2c2c2c"
+            :style="{
+              '--el-switch-on-color': optionStore.themeSwitch ? '#2c2c2c' : ''
+            }"
           />
           <el-switch
             v-model="optionStore.languageSwitch"
             active-text="英"
             inactive-text="中"
-            :active-color="optionStore.themeSwitch ? '#2c2c2c' : ''"
+            :style="{
+              '--el-switch-on-color': optionStore.themeSwitch ? '#2c2c2c' : ''
+            }"
           />
         </div>
         <el-dropdown placement="bottom">
