@@ -7,9 +7,10 @@ import {
   type RouteLocationMatched
 } from 'vue-router'
 import { ArrowRight, ArrowDown, Moon, Sunny } from '@element-plus/icons-vue'
-import { useOptionStore } from '@/stores'
+import { useOptionStore, useUserStore } from '@/stores'
 import type { TagBar } from '@/interface'
 const optionStore = useOptionStore()
+const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
 
@@ -177,7 +178,10 @@ const openMenu = (item: TagBar, event: PointerEvent) => {
     right.value = true
   }
   // 判断所选的是否为tag数组的头元素，并且tag数组只有一个元素
-  if (selectTagIndex.value === optionStore.tagBar.length - 1) {
+  if (
+    selectTagIndex.value === 0 &&
+    selectTagIndex.value === optionStore.tagBar.length - 1
+  ) {
     left.value = false
     right.value = false
   }
@@ -193,6 +197,11 @@ watch(menuVisible, (val) => {
     document.body.removeEventListener('click', closeMenu)
   }
 })
+
+// 个人中心
+const goCenter = () => {
+  router.push('/center')
+}
 </script>
 <template>
   <div class="header-container">
@@ -232,12 +241,12 @@ watch(menuVisible, (val) => {
         </div>
         <el-dropdown placement="bottom">
           <span class="el-dropdown-span">
-            <el-avatar />
+            <el-avatar :src="userStore.userData.image_path" />
             <el-icon><ArrowDown /></el-icon>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item> 个人中心 </el-dropdown-item>
+              <el-dropdown-item @click="goCenter"> 个人中心 </el-dropdown-item>
               <el-dropdown-item @click="logout">退出</el-dropdown-item>
             </el-dropdown-menu>
           </template>

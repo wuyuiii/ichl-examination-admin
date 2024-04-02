@@ -244,6 +244,11 @@ const router = createRouter({
               component: () => import('@/views/Log/LogList.vue')
             }
           ]
+        },
+        {
+          path: '/center',
+          meta: { title: '个人中心' },
+          component: () => import('@/views/Center/PersonalCenter.vue')
         }
       ]
     }

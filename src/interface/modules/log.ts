@@ -5,3 +5,7 @@ export interface LogDataType {
   content: string
   create_time: string
 }
+
+export interface MyLogDataType extends LogDataType {
+  user_id: number
+}

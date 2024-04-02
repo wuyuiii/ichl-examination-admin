@@ -62,12 +62,21 @@ export const updateUserStateAPI = (id: number) => {
 }
 
 /**
- * 获取用户操作日志
+ * 获取用户操作日志列表
  * @param id
  * @returns
  */
 export const getLogListAPI = (data: UserLogListType) => {
   return request.get('/user/stuLogList', { params: data })
+}
+
+/**
+ * 获取操作日志
+ * @param {*} id
+ * @returns
+ */
+export const getLogAPI = (id: number) => {
+  return request.get('/user/stuLog', { params: { id } })
 }
 
 /**
@@ -77,4 +86,21 @@ export const getLogListAPI = (data: UserLogListType) => {
  */
 export const delStuLogAPI = (id: number) => {
   return request.delete('/user/delStuLog', { params: { id } })
+}
+
+export const updateMineInfoAPI = (data: any) => {
+  return request.patch('/user/updateStudent', data)
+}
+
+/**
+ * 上传图片
+ * @param {*} file
+ * @returns
+ */
+export const uploadAvatar = (file: any) => {
+  return request.post('/user/uploadAvatar', file, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 }
