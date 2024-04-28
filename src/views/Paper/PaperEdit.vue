@@ -46,6 +46,13 @@ const getPaper = async () => {
   const { data: res } = await getPaperAPI(route.query.id as any)
   if (res.status === 200) {
     editFormData.value = res.data
+  } else {
+    ElMessage.error(res.message)
+    const index = optionStore.tagBar.findIndex(
+      (item) => item.current === route.fullPath
+    )
+    router.push(optionStore.tagBar[index].back)
+    optionStore.tagBar.splice(index, 1)
   }
 }
 if (route.query.id) {
@@ -192,6 +199,7 @@ const handleCurrentChange = (value: number) => {
           style="width: 15rem"
           v-model="editFormData.edu"
           :options="options"
+          :props="{ checkStrictly: true }"
           clearable
         />
       </el-form-item>

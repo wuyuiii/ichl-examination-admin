@@ -249,6 +249,22 @@ const router = createRouter({
           path: '/center',
           meta: { title: '个人中心' },
           component: () => import('@/views/Center/PersonalCenter.vue')
+        },
+        {
+          path: '/video',
+          meta: { title: '视频管理' },
+          children: [
+            {
+              path: '/video/list',
+              meta: { title: '视频列表' },
+              component: () => import('@/views/Video/VideoList.vue')
+            },
+            {
+              path: '/video/edit',
+              meta: { title: '视频创编' },
+              component: () => import('@/views/Video/VideoEdit.vue')
+            }
+          ]
         }
       ]
     }

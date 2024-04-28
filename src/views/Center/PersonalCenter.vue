@@ -14,14 +14,34 @@ const userStore = useUserStore()
 const activeName = ref('first')
 
 // 用户动态
+const stuLogListParams = ref({
+  pageIndex: 1,
+  pageSize: 10,
+  id: userStore.userData?.id
+})
 const stuLogList = ref<LogDataType[]>([])
+const isOver = ref(false)
 const getStuLogList = async () => {
-  const { data: res } = await getLogAPI(userStore.userData?.id as number)
+  if (isOver.value) {
+    return
+  }
+  const { data: res } = await getLogAPI(stuLogListParams.value)
   if (res.status === 200) {
-    stuLogList.value = res.data
+    if (res.data.length < stuLogListParams.value.pageSize) {
+      isOver.value = true
+    }
+    stuLogList.value = [...stuLogList.value, ...res.data]
   }
 }
 getStuLogList()
+
+const handleScroll = (e: any) => {
+  const v = document.querySelector('.viewClass')
+  if (e.scrollTop > (v as any).clientHeight - 700) {
+    stuLogListParams.value.pageIndex += 1
+    getStuLogList()
+  }
+}
 
 // 用户资料
 const editFormData = ref({
@@ -90,7 +110,9 @@ const submit = () => {
               <Plus />
             </el-icon>
           </UploadAvatar>
-          <h4>{{ userStore.userData.user_name }}</h4>
+          <h3 style="margin-top: 20px">
+            {{ userStore.userData.user_name }}
+          </h3>
         </div>
         <div class="center-about-info">
           <ul>
@@ -128,7 +150,11 @@ const submit = () => {
       <el-card style="height: 100%" shadow="never">
         <el-tabs v-model="activeName" style="height: 100%">
           <el-tab-pane label="我的动态" name="first" style="height: 100%">
-            <el-scrollbar height="100%">
+            <el-scrollbar
+              height="100%"
+              @scroll="handleScroll"
+              view-class="viewClass"
+            >
               <el-timeline style="max-width: 600px">
                 <el-timeline-item
                   size="large"
@@ -219,7 +245,7 @@ const submit = () => {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1.25rem;
     }
 
     .center-about-info {
@@ -240,6 +266,9 @@ const submit = () => {
 
     &:deep(.el-tabs__content) {
       height: calc(100% - 40px);
+    }
+    &:deep(.el-scrollbar__wrap) {
+      padding-left: 0.625rem;
     }
   }
 }

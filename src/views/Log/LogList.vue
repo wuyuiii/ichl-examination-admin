@@ -4,6 +4,7 @@ import { Search } from '@element-plus/icons-vue'
 import type { LogDataType, UserLogListType } from '@/interface'
 import { getLogListAPI } from '@/api/user'
 import { formatDate } from '@/utils/format'
+import { ElMessage } from 'element-plus'
 
 const logListData = ref<LogDataType[]>([])
 const total = ref(0)
@@ -14,14 +15,16 @@ const logParams = ref<UserLogListType>({
   keyword: ''
 })
 
-// 获取学科列表
+// 获取日志列表
 const getLog = async () => {
   const { data: res } = await getLogListAPI(logParams.value)
   if (res.status === 200) {
-    loading.value = false
     logListData.value = res.data
     total.value = res.total
+  } else {
+    ElMessage.error(res.message)
   }
+  loading.value = false
 }
 getLog()
 

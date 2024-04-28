@@ -45,3 +45,27 @@ export const delQuestionAPI = (id: number) => {
 export const updateQuestionAPI = (data: CreateQuestionType) => {
   return request.patch('/question/updateQuestion', data)
 }
+
+/**
+ * 导入题目文件
+ * @param file
+ * @returns
+ */
+export const uploadQuestionAPI = (file: any) => {
+  return request.post('/question/uploadQuestion', file, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
+/**
+ * 合并文件
+ * @param val
+ * @returns
+ */
+export const mergeQuestionAPI = (val: number) => {
+  return request.get('/question/mergeChunkFile', {
+    params: { wrongCount: val }
+  })
+}

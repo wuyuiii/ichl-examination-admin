@@ -75,8 +75,8 @@ export const getLogListAPI = (data: UserLogListType) => {
  * @param {*} id
  * @returns
  */
-export const getLogAPI = (id: number) => {
-  return request.get('/user/stuLog', { params: { id } })
+export const getLogAPI = (data: any) => {
+  return request.get('/user/stuLog', { params: data })
 }
 
 /**

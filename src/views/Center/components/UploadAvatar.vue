@@ -48,6 +48,7 @@ const handleCropMoving = () => {
     cropperFile.value = new File([data], Date.now() as any, {
       type: data.type
     })
+    console.log(cropperFile)
     const reader = new FileReader()
     reader.readAsDataURL(cropperFile.value)
     reader.onload = (e) => {
@@ -73,6 +74,7 @@ const submitUpload = async () => {
 
 // 关闭上传
 const closeUpload = () => {
+  inputFileRef.value.value = ''
   avatarDialogVisible.value = false
 }
 </script>

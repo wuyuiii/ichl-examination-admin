@@ -4,6 +4,8 @@
 export interface LoginDataType {
   user_name: string
   password: string
+  phone: string
+  code: string
 }
 
 /**
@@ -79,4 +81,12 @@ export interface GetAnswerListType {
   paperType: number | null
   subjectId: number | null
   status: number | null
+}
+
+export interface VideoListType {
+  id: number
+  pageIndex: number
+  pageSize: number
+  keyword: string
+  subjectId: string
 }
