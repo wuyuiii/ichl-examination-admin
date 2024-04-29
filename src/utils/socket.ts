@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client'
-
-export const socket = io('https://examapi.ywhxy.cn:3008', {
+import { baseURL } from '@/utils/request'
+export const socket = io(baseURL, {
   transports: ['websocket'], // 指定传输方式，如WebSocket
   autoConnect: true, // 是否自动连接
   reconnection: true, // 是否自动重新连接

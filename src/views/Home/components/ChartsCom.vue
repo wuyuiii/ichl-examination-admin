@@ -53,8 +53,6 @@ const handleChartsData = (data: ChartsData) => {
   const allMonths = Array.from({ length: new Date().getMonth() }, (_, i) =>
     String(i + 2).padStart(2, '0')
   )
-  console.log(allMonths)
-
   allMonths.forEach((month: string) => {
     const found = data.questionData.find((item: ItemData) => {
       return parseInt(item.name) === parseInt(month)

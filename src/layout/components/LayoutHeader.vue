@@ -142,8 +142,8 @@ const logout = () => {
   localStorage.removeItem('option')
   localStorage.removeItem('uid')
   localStorage.removeItem('t')
+  localStorage.removeItem('user')
   router.push('/login')
-  console.log(window.history)
 }
 
 // 打开右键菜单

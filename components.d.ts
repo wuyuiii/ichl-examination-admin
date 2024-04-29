@@ -7,7 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    ElAffix: typeof import('element-plus/es')['ElAffix']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
@@ -49,7 +48,6 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
-    ElTa: typeof import('element-plus/es')['ElTa']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
@@ -58,12 +56,10 @@ declare module 'vue' {
     ElTimeline: typeof import('element-plus/es')['ElTimeline']
     ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
-    ElUpload: typeof import('element-plus/es')['ElUpload']
     IEpCollectionTag: typeof import('~icons/ep/collection-tag')['default']
     IEpDiscount: typeof import('~icons/ep/discount')['default']
     IEpDocument: typeof import('~icons/ep/document')['default']
     IEpHouse: typeof import('~icons/ep/house')['default']
-    IEpIconPicture: typeof import('~icons/ep/icon-picture')['default']
     IEpMenu: typeof import('~icons/ep/menu')['default']
     IEpMessage: typeof import('~icons/ep/message')['default']
     IEpNotebook: typeof import('~icons/ep/notebook')['default']

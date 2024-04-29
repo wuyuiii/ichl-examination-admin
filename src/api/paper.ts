@@ -16,7 +16,13 @@ export const getPaperListAPI = (data: paperListType) => {
  * @returns
  */
 export const getPaperAPI = (id: number) => {
-  return request.get('/paper/getPaper', { params: { id } })
+  return request.get('/paper/getPaper', {
+    params: { id },
+    headers: {
+      'id-custom-header': JSON.parse(localStorage.getItem('user') as string)
+        .userData.id
+    }
+  })
 }
 
 /**

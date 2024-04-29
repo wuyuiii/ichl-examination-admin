@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useUserStore } from '@/stores'
 import { getLogAPI } from '@/api/user'
 import type { LogDataType } from '@/interface'
@@ -8,6 +8,7 @@ import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { updateMineInfoAPI } from '@/api/user'
 import UploadAvatar from './components/UploadAvatar.vue'
 import { Plus } from '@element-plus/icons-vue'
+import { debounce } from 'lodash'
 
 const userStore = useUserStore()
 
@@ -35,13 +36,26 @@ const getStuLogList = async () => {
 }
 getStuLogList()
 
-const handleScroll = (e: any) => {
-  const v = document.querySelector('.viewClass')
-  if (e.scrollTop > (v as any).clientHeight - 700) {
+const scrollRef = ref()
+const scrollTop = ref(0) // 记录数据加载前滚动条的位置，用来手动定位scrollbar
+const handleScroll = debounce((e) => {
+  const wrapRef = scrollRef.value.wrapRef
+  scrollRef.value.moveY = (wrapRef.scrollTop * 100) / wrapRef.clientHeight
+  const poor = wrapRef.scrollHeight - wrapRef.clientHeight
+  if (e.scrollTop + 2 > poor) {
+    scrollTop.value = e.scrollTop
     stuLogListParams.value.pageIndex += 1
-    getStuLogList()
   }
-}
+}, 100)
+
+watch(
+  () => stuLogListParams.value.pageIndex,
+  () => {
+    if (stuLogListParams.value.pageIndex > 1 && !isOver.value) {
+      getStuLogList()
+    }
+  }
+)
 
 // 用户资料
 const editFormData = ref({
@@ -150,11 +164,7 @@ const submit = () => {
       <el-card style="height: 100%" shadow="never">
         <el-tabs v-model="activeName" style="height: 100%">
           <el-tab-pane label="我的动态" name="first" style="height: 100%">
-            <el-scrollbar
-              height="100%"
-              @scroll="handleScroll"
-              view-class="viewClass"
-            >
+            <el-scrollbar height="100%" @scroll="handleScroll" ref="scrollRef">
               <el-timeline style="max-width: 600px">
                 <el-timeline-item
                   size="large"

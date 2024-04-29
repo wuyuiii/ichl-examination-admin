@@ -2,10 +2,11 @@ import axios from 'axios'
 import router from '@/router/index'
 import { ElMessage } from 'element-plus'
 
-export const baseURL = 'https://examapi.ywhxy.cn'
+// export const baseURL = 'https://examapi.ywhxy.cn'
+export const baseURL = 'http://localhost:3000'
 const instance = axios.create({
   baseURL: baseURL,
-  timeout: 2000
+  timeout: 5000
 })
 
 /**
