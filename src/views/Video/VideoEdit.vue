@@ -256,7 +256,8 @@ const handleVideoBeforeUpload = async (e: any) => {
 const submitProgress = ref(0)
 const submitDialog = ref(false)
 const submit = async () => {
-  socket.emit('videoSubmit')
+  const id = JSON.parse(localStorage.getItem('user') as string).userData.id
+  socket.emit('videoSubmit', `${id}`)
   socket.on('uploadOssProgress', (data) => {
     submitProgress.value = Math.round(data * 100)
   })

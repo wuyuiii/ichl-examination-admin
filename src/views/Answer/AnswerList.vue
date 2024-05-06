@@ -133,7 +133,7 @@ const handleCurrentChange = (value: number) => {
       </el-table-column>
       <el-table-column label="得分" width="100">
         <template #default="{ row }">
-          {{ row.system_score + (row.user_score ? row.user_score : 0) }} /
+          {{ row.user_score ? row.user_score : 0 }} /
           {{ row.paper_score }}
         </template>
       </el-table-column>

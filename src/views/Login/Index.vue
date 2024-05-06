@@ -122,20 +122,20 @@ const getQRCode = async () => {
   const { data: res } = await getQRCodeAPI()
   if (res.status === 200) {
     wxQRCode.value = res.data
+    socket.emit('loginQRCodeStatus', res.scene)
+    socket.on('resendLoginStatus', (data) => {
+      if (data.status) {
+        userStore.setUserData(data.user)
+        localStorage.setItem('t', data.token)
+        localStorage.setItem('uid', data.uid)
+        ElMessage.success(data.message)
+        router.replace('/')
+      }
+    })
     let n = setInterval(async () => {
       const { data: checkRes } = await checkQRCodeAPI(res.scene)
       if (checkRes.status === 200) {
         wxQRCodeStatus.value = true
-        socket.emit('loginQRCodeStatus')
-        socket.on('resendLoginStatus', (data) => {
-          if (data.status) {
-            userStore.setUserData(data.user)
-            localStorage.setItem('t', data.token)
-            localStorage.setItem('uid', data.uid)
-            ElMessage.success(data.message)
-            router.replace('/')
-          }
-        })
         clearInterval(n)
       }
       if (checkRes.status === 400) {
