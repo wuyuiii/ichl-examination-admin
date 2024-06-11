@@ -1,46 +1,31 @@
-# ichl-admin
+# ichl学生考试系统管理端、教师端
 
-This template should help get you started developing with Vue 3 in Vite.
+项目访问地址：[https://exam.ywhxy.cn:7002](https://exam.ywhxy.cn:7002)
 
-## Recommended IDE Setup
+测试账号：admin
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+密码：amdin
 
-## Type Support for `.vue` Imports in TS
+## 项目功能
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+| 功能     | 介绍                                                         |
+| :------- | :----------------------------------------------------------- |
+| 登录     | 用户名、密码登录 \|\| 手机号、验证码登录 \|\| 微信小程序扫码登录 |
+| 注册     | 用户名、密码、手机号、验证码                                 |
+| 用户管理 | 对学生、教师、管理员等信息的编辑、删除、添加                 |
+| 学科管理 | 学科管理                                                     |
+| 卷库管理 | 创建、删除、修改、添加试卷                                   |
+| 题库管理 | 创建、删除、修改、添加题目                                   |
+| 消息管理 | 向指定学生或者全体学生发送消息                               |
+| 教务管理 | 对班级专业学院和学生所属班级信息的管理                       |
+| 答卷管理 | 批改试卷                                                     |
+| 视频管理 | 创建、删除、修改、添加视频                                   |
+| 日志中心 | 查看所有用户的操作日志                                       |
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+### 扫码登录功能 ![输入图片说明](src/assets/ichl-exam-admin%E6%89%AB%E7%A0%81%E7%99%BB%E5%BD%95.png)
 
-## Customize configuration
+## 暂未开发功能
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-pnpm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-pnpm dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-pnpm build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-pnpm lint
-```
+- 富文本编辑器未完善
+- 任务中心
