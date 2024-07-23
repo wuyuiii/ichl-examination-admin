@@ -8,6 +8,9 @@ import { delMessageAPI, getMessageListAPI } from '@/api/message'
 import { useOptionStore } from '@/stores'
 import type { MessageListType, MessageDataType } from '@/interface'
 import { formatDate } from '@/utils/format'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -47,9 +50,13 @@ const edit = () => {
 
 // 删除消息
 const remove = async (row: MessageDataType) => {
-  ElMessageBox.confirm(`是否删除学科：${row.title}`, '删除学科', {
-    type: 'error'
-  }).then(async () => {
+  ElMessageBox.confirm(
+    `${t('MESSAGE.DELETE_MESSAGE_CONTENT')}：${row.title}`,
+    t('MESSAGE.DELETE_MESSAGE_TITLE'),
+    {
+      type: 'error'
+    }
+  ).then(async () => {
     const { data: res } = await delMessageAPI(row.id as any)
     if (res.status === 200) {
       ElMessage({
@@ -85,11 +92,13 @@ const handleCurrentChange = (value: number) => {
       <el-input
         class="messageList-search-input"
         v-model="messageListParams.keyword"
-        placeholder="输入发送人姓名查询"
+        :placeholder="$t('MESSAGE.SEND_USER_NAME_PLACEHOLDER')"
         :prefix-icon="Search"
         @change="getmessageList"
       ></el-input>
-      <el-button type="primary" @click="edit">添加</el-button>
+      <el-button type="primary" @click="edit">{{
+        $t('MESSAGE.BUTTON')
+      }}</el-button>
     </div>
     <el-table
       v-loading="loading"
@@ -98,16 +107,19 @@ const handleCurrentChange = (value: number) => {
       border
     >
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="title" label="消息标题" />
-      <el-table-column prop="content" label="消息内容" />
-      <el-table-column prop="receive_user_count" label="接收人数" />
-      <el-table-column prop="read_count" label="已读人数" />
-      <el-table-column label="发送人">
+      <el-table-column prop="title" :label="$t('MESSAGE.MESSAGE_TITLE')" />
+      <el-table-column prop="content" :label="$t('MESSAGE.MESSAGE_CONTENT')" />
+      <el-table-column
+        prop="receive_user_count"
+        :label="$t('MESSAGE.RECEIVE_COUNT')"
+      />
+      <el-table-column prop="read_count" :label="$t('MESSAGE.READ_COUNT')" />
+      <el-table-column :label="$t('MESSAGE.SEND_USER_NAME')">
         <template #default="{ row }">
           <el-tag type="success">{{ row.send_real_name }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="接收人用户名" width="200px">
+      <el-table-column :label="$t('MESSAGE.RECEIVE_USER_NAME')" width="200px">
         <template #default="{ row }">
           <el-scrollbar>
             <el-tag
@@ -120,15 +132,15 @@ const handleCurrentChange = (value: number) => {
           </el-scrollbar>
         </template>
       </el-table-column>
-      <el-table-column label="发送时间">
+      <el-table-column :label="$t('MESSAGE.SEND_TIME')">
         <template #default="{ row }">
           {{ formatDate(row.create_time, 'YYYY-MM-DD HH:mm:ss') }}
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('MESSAGE.OPERATE')">
         <template #default="{ row }">
           <el-button type="danger" @click="remove(row)" size="small" plain>
-            删除
+            {{ $t('MESSAGE.DELETE') }}
           </el-button>
         </template>
       </el-table-column>

@@ -8,6 +8,9 @@ import type { SubjectListType } from '@/interface'
 import type { SubjectDataType } from '@/interface/modules/subject'
 import { delSubjectAPI, getSubjectListAPI } from '@/api/subject'
 import { useOptionStore } from '@/stores'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -51,9 +54,13 @@ const edit = (row: SubjectDataType) => {
 
 // 删除学科
 const remove = async (row: SubjectDataType) => {
-  ElMessageBox.confirm(`是否删除学科：${row.name}`, '删除学科', {
-    type: 'error'
-  }).then(async () => {
+  ElMessageBox.confirm(
+    `${t('SUBJECT.DELETE_SUBJECT_CONTENT')}：${row.name}`,
+    t('SUBJECT.DELETE_SUBJECT_TITLE'),
+    {
+      type: 'error'
+    }
+  ).then(async () => {
     const { data: res } = await delSubjectAPI(row.id as any)
     if (res.status === 200) {
       ElMessage({
@@ -89,11 +96,13 @@ const handleCurrentChange = (value: number) => {
       <el-input
         class="subjectList-search-input"
         v-model="subjectListParams.keyword"
-        placeholder="输入学科查询"
+        :placeholder="$t('SUBJECT.PLACEHOLDER')"
         :prefix-icon="Search"
         @change="getSubjectList"
       ></el-input>
-      <el-button type="primary" @click="edit">添加</el-button>
+      <el-button type="primary" @click="edit">
+        {{ $t('SUBJECT.BUTTON') }}
+      </el-button>
     </div>
     <el-table
       v-loading="loading"
@@ -102,14 +111,14 @@ const handleCurrentChange = (value: number) => {
       border
     >
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="name" label="学科" />
-      <el-table-column label="操作">
+      <el-table-column prop="name" :label="$t('SUBJECT.SUBJECT')" />
+      <el-table-column :label="$t('SUBJECT.OPERATE')">
         <template #default="{ row }">
-          <el-button type="primary" size="small" plain @click="edit(row)"
-            >编辑</el-button
-          >
+          <el-button type="primary" size="small" plain @click="edit(row)">
+            {{ $t('SUBJECT.EDIT') }}
+          </el-button>
           <el-button type="danger" size="small" plain @click="remove(row)">
-            删除
+            {{ $t('SUBJECT.DELETE') }}
           </el-button>
         </template>
       </el-table-column>

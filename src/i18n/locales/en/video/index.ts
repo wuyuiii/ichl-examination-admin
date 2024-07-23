@@ -1,0 +1,21 @@
+export default {
+  VIDEO_NAME: 'Video Name',
+  VIDEO_NAME_PLACEHOLDER: 'Enter video name',
+  CREATE_TIME: 'Create Time',
+  CREATE_USER: 'Create User',
+  OPERATE: 'Founder',
+  EDIT: 'Edit',
+  DELETE: 'Delete',
+  VIDEO_PHOTO: 'Video cover image',
+  VIDEO_PHOTO_PLACEHOLDER: 'Please upload the video cover image',
+  VIDEO_PLACEHOLDER: 'Please upload a video',
+  VIDEO: 'Video',
+  SUBMIT: 'Submit',
+  RESET: 'Reset',
+  IMPORT: 'Import',
+  ADD: 'Add',
+  DELETE_VIDEO_TITLE: 'Delete Video',
+  DELETE_VIDEO_CONTENT: 'Do you want to delete the video',
+  EDU_OPTIONS_PLACEHOLDER: 'Please select College / Department / Class',
+  SUBJECT_PLACEHOLDER: 'Select Subject'
+}

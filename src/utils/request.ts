@@ -32,7 +32,7 @@ instance.interceptors.request.use(
  */
 instance.interceptors.response.use(
   (res) => {
-    if (res.data.status === 401) {
+    if (res?.data.status === 401) {
       router.push('/login')
       localStorage.removeItem('uid')
       localStorage.removeItem('t')
@@ -45,17 +45,24 @@ instance.interceptors.response.use(
     return res
   },
   (err) => {
+    if (err.message.split(' ')[0] === 'timeout') {
+      return ElMessage.error('网络超时')
+    }
+
+    if (err.code === 'ERR_NETWORK') {
+      //@ts-ignore
+      return ElMessage({
+        type: 'error',
+        message: '服务异常'
+      })
+    }
     if (err.response.data.status === 401) {
       router.push('/login')
       localStorage.removeItem('uid')
       localStorage.removeItem('t')
       localStorage.removeItem('u')
     }
-    //@ts-ignore
-    ElMessage({
-      type: 'error',
-      message: err.response.data.message || '服务异常'
-    })
+
     Promise.reject(err)
   }
 )

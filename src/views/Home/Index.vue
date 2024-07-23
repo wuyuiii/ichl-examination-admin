@@ -2,6 +2,9 @@
 import { ref } from 'vue'
 import ChartsCom from './components/ChartsCom.vue'
 import { getCardDataAPI } from '@/api/home'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const cardData: any = ref({})
 const getCardData = async () => {
@@ -11,12 +14,20 @@ const getCardData = async () => {
   }
 }
 getCardData()
+
+const goto = (val: string) => {
+  router.push(`${val}/list`)
+}
 </script>
 
 <template>
   <div class="home-container">
     <div class="home-panel-group">
-      <el-card class="home-panel" body-class="home-panel-body">
+      <el-card
+        class="home-panel"
+        body-class="home-panel-body"
+        @click="goto('user/student')"
+      >
         <div class="home-panel-left icon-renshu">
           <svg
             class="icon home-panel-icon"
@@ -27,11 +38,17 @@ getCardData()
           </svg>
         </div>
         <div class="home-panel-right">
-          <span class="home-panel-title">学生人数</span>
+          <span class="home-panel-title">
+            {{ $t('HOME.STUDENT_NUM') }}
+          </span>
           {{ cardData.studentCount }}
         </div>
       </el-card>
-      <el-card class="home-panel" body-class="home-panel-body">
+      <el-card
+        class="home-panel"
+        body-class="home-panel-body"
+        @click="goto('question')"
+      >
         <div class="home-panel-left icon-timu">
           <svg
             class="icon home-panel-icon"
@@ -42,11 +59,17 @@ getCardData()
           </svg>
         </div>
         <div class="home-panel-right">
-          <span class="home-panel-title">题目总数</span>
+          <span class="home-panel-title">
+            {{ $t('HOME.QUESTION_COUNT') }}
+          </span>
           {{ cardData.questionCount }}
         </div>
       </el-card>
-      <el-card class="home-panel" body-class="home-panel-body">
+      <el-card
+        class="home-panel"
+        body-class="home-panel-body"
+        @click="goto('paper')"
+      >
         <div class="home-panel-left icon-shijuan">
           <svg
             class="icon home-panel-icon"
@@ -57,11 +80,17 @@ getCardData()
           </svg>
         </div>
         <div class="home-panel-right">
-          <span class="home-panel-title">试卷总数</span>
+          <span class="home-panel-title">
+            {{ $t('HOME.PAPER_COUNT') }}
+          </span>
           {{ cardData.paperCount }}
         </div>
       </el-card>
-      <el-card class="home-panel" body-class="home-panel-body">
+      <el-card
+        class="home-panel"
+        body-class="home-panel-body"
+        @click="goto('answer')"
+      >
         <div class="home-panel-left icon-dajuan">
           <svg
             class="icon home-panel-icon"
@@ -72,7 +101,9 @@ getCardData()
           </svg>
         </div>
         <div class="home-panel-right">
-          <span class="home-panel-title">答卷总数</span>
+          <span class="home-panel-title">
+            {{ $t('HOME.ANSWER_PAPER_COUNT') }}
+          </span>
           {{ cardData.answerPaperCount }}
         </div>
       </el-card>

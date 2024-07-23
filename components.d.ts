@@ -7,6 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Editor: typeof import('./src/components/Editor.vue')['default']
+    EditorCom: typeof import('./src/components/EditorCom.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
@@ -67,7 +69,7 @@ declare module 'vue' {
     IEpTickets: typeof import('~icons/ep/tickets')['default']
     IEpUser: typeof import('~icons/ep/user')['default']
     IEpVideoPlay: typeof import('~icons/ep/video-play')['default']
-    RichEditor: typeof import('./src/components/RichEditor/RichEditor.vue')['default']
+    RichEditor: typeof import('./src/components/RichEditor.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

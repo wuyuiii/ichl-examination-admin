@@ -79,15 +79,19 @@ const submit = async () => {
           <h3 class="judge-order-title">{{ answerData?.paper.paperTitle }}</h3>
           <div class="judge-order-info">
             <span>
-              <i class="judge-order-info-text">得分 :</i>
+              <i class="judge-order-info-text"
+                >{{ $t('ANSWER.ANSWER_SCORE') }} :</i
+              >
               {{ answerData?.answer.score }}
             </span>
             <span>
-              <i class="judge-order-info-text">耗时 :</i>
+              <i class="judge-order-info-text">{{ $t('ANSWER.TIME') }} :</i>
               {{ answerData?.answer.doTime }}
             </span>
             <span>
-              <i class="judge-order-info-text">提交人 :</i>
+              <i class="judge-order-info-text"
+                >{{ $t('ANSWER.ANSWER_STU') }} :</i
+              >
               {{ answerData?.answer.answerUser }}
             </span>
           </div>
@@ -105,9 +109,9 @@ const submit = async () => {
           </el-tag>
         </div>
         <div class="judge-order-submit" v-if="!answerData.answer.status">
-          <el-button type="primary" style="width: 70%" @click="submit"
-            >提交批改</el-button
-          >
+          <el-button type="primary" style="width: 70%" @click="submit">{{
+            $t('ANSWER.SUBMIT_CORRECT')
+          }}</el-button>
         </div>
       </el-card>
     </div>
@@ -202,7 +206,7 @@ const submit = async () => {
               />
               <div class="question-item-answer">
                 <div class="question-item-result">
-                  结果：
+                  {{ $t('ANSWER.RESULT') }} :
                   <el-tag
                     :type="
                       DoRightEnums[
@@ -211,6 +215,7 @@ const submit = async () => {
                         ].doRight
                       ].type
                     "
+                    style="margin-left: 0.625rem"
                     >{{
                       DoRightEnums[
                         answerData.answer.answerItems[
@@ -221,11 +226,11 @@ const submit = async () => {
                   >
                 </div>
                 <div class="question-item-right-answer">
-                  标准答案：
+                  {{ $t('QUESTION.STANDART_ANSWER') }} :
                   <span>{{ questionItem.correct.toString() }}</span>
                 </div>
                 <div class="question-item-score">
-                  得分：
+                  {{ $t('ANSWER.ANSWER_SCORE') }} :
                   <span>
                     {{
                       answerData?.answer.answerItems[questionItem.itemOrder - 1]
@@ -234,7 +239,7 @@ const submit = async () => {
                   </span>
                 </div>
                 <div class="question-item-quesiton-score">
-                  题目分数：
+                  {{ $t('ANSWER.QUESTION_SCORE') }} :
                   <span>
                     {{
                       answerData?.answer.answerItems[questionItem.itemOrder - 1]
@@ -243,7 +248,7 @@ const submit = async () => {
                   </span>
                 </div>
                 <div class="question-item-difficult">
-                  难度：
+                  {{ $t('QUESTION.DIFFICULTY') }} :
                   <el-rate v-model="questionItem.difficult" disabled />
                 </div>
                 <div
@@ -255,7 +260,9 @@ const submit = async () => {
                     ].text === '待批改'
                   "
                 >
-                  <span style="color: #e6a23c">批改：</span>
+                  <span style="color: #e6a23c">
+                    {{ $t('ANSWER.CORRECT') }} :
+                  </span>
                   <el-input-number
                     v-model="
                       answerData.answer.answerItems[questionItem.itemOrder - 1]

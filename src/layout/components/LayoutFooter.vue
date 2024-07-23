@@ -6,7 +6,7 @@
       <el-tooltip
         class="item"
         effect="dark"
-        content="微信：hhh4413_"
+        :content="`${$t('FOOTER.WX')}：hhh4413_`"
         placement="top"
       >
         <svg class="icon font" aria-hidden="true">
@@ -26,7 +26,7 @@
       <el-tooltip
         class="item"
         effect="dark"
-        content="访问我的gitee"
+        :content="$t('FOOTER.GITEE')"
         placement="top"
       >
         <a href="https://gitee.com/xiaoyin001" target="_blank">

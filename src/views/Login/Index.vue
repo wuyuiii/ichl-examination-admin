@@ -220,7 +220,7 @@ getQRCode()
             </el-button>
           </el-form-item>
           <span class="login-switch-phone" @click="switchPhone">
-            手机号登录
+            {{ !loginPhoneShow ? '手机号登录' : '账号登录' }}
           </span>
         </el-form>
         <div class="login-wx-box">
@@ -234,9 +234,9 @@ getQRCode()
                 </div>
               </template>
             </el-image>
-            <span class="login-wx-qrcode-scan" v-if="wxQRCodeStatus"
-              >已扫码</span
-            >
+            <span class="login-wx-qrcode-scan" v-if="wxQRCodeStatus">
+              已扫码
+            </span>
           </div>
         </div>
       </div>

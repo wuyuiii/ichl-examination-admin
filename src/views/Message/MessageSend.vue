@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import { selectUserNameAPI, sendMessageAPI } from '@/api/message'
 import type { OptionItem, SendMessageDataType } from '@/interface'
-import { ElMessage } from 'element-plus'
+import { ElMessage, type FormInstance } from 'element-plus'
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useOptionStore } from '@/stores'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -15,12 +18,21 @@ const sendFormData = ref<SendMessageDataType>({
   content: '',
   receive_id: []
 })
-const sendFormRef = ref()
+const sendFormRef = ref<FormInstance>()
 const sendFormRules = {
-  title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
-  content: [{ required: true, message: '请输入内容', trigger: 'blur' }],
-  receive_id: [
-    { required: true, message: '请添加要发送的用户', trigger: 'change' }
+  title: [
+    {
+      required: true,
+      message: t('MESSAGE.MESSAGE_TITLE_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  content: [
+    {
+      required: true,
+      message: t('MESSAGE.MESSAGE_CONTENT_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
   ]
 }
 
@@ -43,17 +55,23 @@ const remoteMethod = async (val: string) => {
 
 // 发送
 const send = async () => {
-  const { data: res } = await sendMessageAPI(sendFormData.value)
-  if (res.status === 200) {
-    ElMessage.success(res.message)
-  } else {
-    ElMessage.error(res.message)
-  }
-  const index = optionStore.tagBar.findIndex(
-    (item) => item.current === route.fullPath
-  )
-  router.push(optionStore.tagBar[index].back)
-  optionStore.tagBar.splice(index, 1)
+  sendFormRef.value?.validate(async (r) => {
+    if (r) {
+      const { data: res } = await sendMessageAPI(sendFormData.value)
+      if (res.status === 200) {
+        ElMessage.success(res.message)
+      } else {
+        ElMessage.error(res.message)
+      }
+      const index = optionStore.tagBar.findIndex(
+        (item) => item.current === route.fullPath
+      )
+      router.push(optionStore.tagBar[index].back)
+      optionStore.tagBar.splice(index, 1)
+      return
+    }
+    return false
+  })
 }
 
 // 重置
@@ -68,24 +86,35 @@ const reset = () => {
       :model="sendFormData"
       :rules="sendFormRules"
       ref="sendFormRef"
-      label-width="140px"
+      label-width="15rem"
     >
-      <el-form-item label="标题" prop="title">
+      <el-form-item prop="title">
+        <template #label>
+          <div class="label">{{ $t('MESSAGE.MESSAGE_TITLE') }} :</div>
+        </template>
         <el-input
           style="width: 31.25rem"
           v-model="sendFormData.title"
-        ></el-input>
+          :placeholder="$t('MESSAGE.MESSAGE_TITLE_PLACEHOLDER')"
+        />
       </el-form-item>
-      <el-form-item label="内容" prop="content">
+      <el-form-item prop="content">
+        <template #label>
+          <div class="label">{{ $t('MESSAGE.MESSAGE_CONTENT') }} :</div>
+        </template>
         <el-input
-          style="width: 61.25rem"
+          style="width: 37.5rem"
           rows="16"
           type="textarea"
           show-word-limit
           v-model="sendFormData.content"
-        ></el-input>
+          :placeholder="$t('MESSAGE.MESSAGE_CONTENT_PLACEHOLDER')"
+        />
       </el-form-item>
-      <el-form-item label="接收人用户名" prop="receive_id">
+      <el-form-item prop="receive_id">
+        <template #label>
+          <div class="label">{{ $t('MESSAGE.RECEIVE_USER_NAME') }} :</div>
+        </template>
         <el-select
           style="width: 15rem"
           v-model="sendFormData.receive_id"
@@ -93,7 +122,7 @@ const reset = () => {
           filterable
           remote
           reserve-keyword
-          placeholder="请输入接收用户名"
+          :placeholder="$t('MESSAGE.RECEIVE_USER_NAME_PLACEHOLDER')"
           :remote-method="remoteMethod"
           :loading="loading"
         >
@@ -106,8 +135,10 @@ const reset = () => {
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="send">发送</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="send">
+          {{ $t('MESSAGE.SEND') }}
+        </el-button>
+        <el-button @click="reset">{{ $t('MESSAGE.RESET') }}</el-button>
       </el-form-item>
     </el-form>
   </div>

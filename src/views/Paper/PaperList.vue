@@ -10,7 +10,9 @@ import { getPaperListAPI, delPaperAPI } from '@/api/paper'
 import { useOptionStore, useUserStore } from '@/stores'
 import { formatDate } from '@/utils/format'
 import { getSubjectListAPI2 } from '@/api/subject'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
@@ -66,9 +68,13 @@ const edit = (row: SubjectDataType) => {
 
 // 删除学科
 const remove = async (row: SubjectDataType) => {
-  ElMessageBox.confirm(`是否删除试卷：${row.name}`, '删除试卷', {
-    type: 'error'
-  }).then(async () => {
+  ElMessageBox.confirm(
+    `${t('PAPER.DELETE_PAPER_CONTENT')}：${row.name}`,
+    t('PAPER.DELETE_PAPER_TITLE'),
+    {
+      type: 'error'
+    }
+  ).then(async () => {
     const { data: res } = await delPaperAPI(row.id as any)
     if (res.status === 200) {
       ElMessage({
@@ -104,25 +110,25 @@ const handleCurrentChange = (value: number) => {
       <el-input
         class="paperList-search-input"
         v-model="paperListParams.keyword"
-        placeholder="输入试卷名查询"
+        :placeholder="$t('PAPER.PAPER_NAME_PLACEHOLDER')"
         :prefix-icon="Search"
         @change="getPaperList"
       />
       <el-select
         class="paperList-search-input"
         v-model="paperListParams.paperType"
-        placeholder="选择试卷类型"
+        :placeholder="$t('PAPER.PAPER_TYPE_PLACEHOLDER')"
         clearable
         @change="getPaperList"
       >
-        <el-option value="1" label="固定试卷" />
-        <el-option value="4" label="时段试卷" />
-        <el-option value="6" label="任务试卷" />
+        <el-option value="1" :label="$t('PAPER.PAPER_OPTION_FIXED')" />
+        <el-option value="4" :label="$t('PAPER.PAPER_OPTION_TIME_SLOT')" />
+        <el-option value="6" :label="$t('PAPER.PAPER_OPTION_TASK_EXAM')" />
       </el-select>
       <el-select
         class="paperList-search-input"
         v-model="paperListParams.subjectId"
-        placeholder="选择学科"
+        :placeholder="$t('PAPER.SUBJECT_PLACEHOLDER')"
         clearable
         @change="getPaperList"
       >
@@ -133,8 +139,8 @@ const handleCurrentChange = (value: number) => {
           :label="item.name"
         />
       </el-select>
-      <el-button style="margin-right: 1.25rem" type="primary" @click="edit"
-        >添加
+      <el-button style="margin-right: 1.25rem" type="primary" @click="edit">
+        {{ $t('PAPER.BUTTON') }}
       </el-button>
     </div>
     <el-table
@@ -144,25 +150,25 @@ const handleCurrentChange = (value: number) => {
       border
     >
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="subject_name" label="学科" />
-      <el-table-column prop="name" label="试卷名" />
-      <el-table-column label="创建时间">
+      <el-table-column prop="subject_name" :label="$t('PAPER.SUBJECT')" />
+      <el-table-column prop="name" :label="$t('PAPER.PAPER_NAME')" />
+      <el-table-column :label="$t('PAPER.CREATE_TIME')">
         <template #default="{ row }">
           {{ formatDate(row.create_time, 'YYYY-MM-DD HH:mm:ss') }}
         </template>
       </el-table-column>
-      <el-table-column label="创建人">
+      <el-table-column :label="$t('PAPER.CREATE_USER')">
         <template #default="{ row }">
           <el-tag type="success">{{ row.create_user }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('PAPER.OPERATE')">
         <template #default="{ row }">
-          <el-button type="primary" size="small" plain @click="edit(row)"
-            >编辑</el-button
-          >
+          <el-button type="primary" size="small" plain @click="edit(row)">
+            {{ $t('PAPER.EDIT') }}
+          </el-button>
           <el-button type="danger" size="small" plain @click="remove(row)">
-            删除
+            {{ $t('PAPER.DELETE') }}
           </el-button>
         </template>
       </el-table-column>

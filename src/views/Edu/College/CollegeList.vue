@@ -6,6 +6,9 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useOptionStore } from '@/stores'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -48,9 +51,13 @@ const edit = (row: CollegeType) => {
 
 // 删除
 const remove = (row: CollegeType) => {
-  ElMessageBox.confirm(`是否删除学院：${row.college_name}`, '删除学院', {
-    type: 'error'
-  }).then(async () => {
+  ElMessageBox.confirm(
+    `${t('EDU.DELETE_COLLEGE_CONTENT')}：${row.college_name}`,
+    t('EDU.DELETE_COLLEGE_TITLE'),
+    {
+      type: 'error'
+    }
+  ).then(async () => {
     const { data: res } = await delCollegeAPI(row.id as number)
     if (res.status === 200) {
       ElMessage.success(res.message)
@@ -80,12 +87,12 @@ const handleCurrentChange = (value: number) => {
       <el-input
         class="college-search-input"
         v-model="collegeListParams.keyword"
-        placeholder="输入学院查询"
+        :placeholder="$t('EDU.COLLEGE_NAME_PLACEHOLDER')"
         clearable
         :prefix-icon="Search"
         @change="getCollegeList"
       />
-      <el-button type="primary" @click="edit">添加</el-button>
+      <el-button type="primary" @click="edit">{{ $t('EDU.ADD') }}</el-button>
     </div>
     <el-table
       v-loading="loading"
@@ -94,22 +101,25 @@ const handleCurrentChange = (value: number) => {
       style="width: 100%; margin-bottom: 1.875rem"
     >
       <el-table-column label="ID" prop="id"></el-table-column>
-      <el-table-column label="学院名" prop="college_name"></el-table-column>
       <el-table-column
-        label="学院专业数量"
+        :label="$t('EDU.COLLEGE_NAME')"
+        prop="college_name"
+      ></el-table-column>
+      <el-table-column
+        :label="$t('EDU.COLLEGE_DEPARTMENT_COUNT')"
         prop="department_size"
       ></el-table-column>
       <el-table-column
-        label="学院学生数量"
+        :label="$t('EDU.COLLEGE_STUDENT_COUNT')"
         prop="student_num"
       ></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('EDU.OPERATE')">
         <template #default="{ row }">
           <el-button type="primary" size="small" plain @click="edit(row)">
-            编辑
+            {{ $t('EDU.EDIT') }}
           </el-button>
           <el-button type="danger" size="small" plain @click="remove(row)">
-            删除
+            {{ $t('EDU.DELETE') }}
           </el-button>
         </template>
       </el-table-column>

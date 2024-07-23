@@ -14,7 +14,11 @@ import {
   updateQuestionAPI
 } from '@/api/question'
 import { useOptionStore } from '@/stores'
-import RichEditor from '@/components/RichEditor/RichEditor.vue'
+// import RichEditor from '@/components/RichEditor/RichEditor.vue'
+import RichEditor from '@/components/RichEditor.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -43,12 +47,48 @@ if (route.query.id) {
 }
 
 const editFormRules: FormRules = {
-  title: [{ required: true, message: '请输入题干', trigger: 'change' }],
-  subject_id: [{ required: true, message: '请选择学科', trigger: 'change' }],
-  score: [{ required: true, message: '请输入分数', trigger: 'change' }],
-  items: [{ required: true, message: '请添加答案选项', trigger: 'change' }],
-  difficult: [{ required: true, message: '请选择题目难度', trigger: 'change' }],
-  correct: [{ required: true, message: '请添加答案', trigger: 'change' }]
+  title: [
+    {
+      required: true,
+      message: t('QUESTION.QUESTION_TITLE_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  subject_id: [
+    {
+      required: true,
+      message: t('QUESTION.SUBJECT_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  score: [
+    {
+      required: true,
+      message: t('QUESTION.SCORE_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  items: [
+    {
+      required: true,
+      message: t('QUESTION.ANSWER_OPTIONS_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  difficult: [
+    {
+      required: true,
+      message: t('QUESTION.DIFFICULTY_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  correct: [
+    {
+      required: true,
+      message: t('QUESTION.ANSWER_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ]
 }
 
 const editFormRef = ref<FormInstance>()
@@ -82,10 +122,10 @@ const submit = () => {
         return
       }
 
-      editFormData.value.title = editFormData.value.title.replace(
-        /<p[^>]*>|<\/p>/g,
-        ''
-      )
+      // editFormData.value.title = editFormData.value.title.replace(
+      //   /<p[^>]*>|<\/p>/g,
+      //   ''
+      // )
       let res = null
       if (!route.query.id) {
         res = await createQuestionAPI(editFormData.value)
@@ -121,6 +161,26 @@ const reset = () => {
 const handleCorrect = (correct: string) => {
   ;(editFormData.value.correct as Array<string>).push(correct)
 }
+
+// 获取富文本组件中的填空数量并生成填空
+const getGapFillCount = (val: number) => {
+  const temp = []
+
+  for (let i = 0; i < val; i++) {
+    const gapFillItem = {
+      prefix: `${i + 1}`,
+      content: ''
+    }
+
+    temp.push(gapFillItem)
+  }
+  editFormData.value.items = temp
+}
+
+// 获取富文本框的内容
+const getGapFillTitle = (val: string) => {
+  editFormData.value.title = val
+}
 </script>
 
 <template>
@@ -129,12 +189,15 @@ const handleCorrect = (correct: string) => {
       :model="editFormData"
       :rules="editFormRules"
       ref="editFormRef"
-      label-width="8.75rem"
+      label-width="15rem"
     >
-      <el-form-item label="学科 :" prop="subject_id">
+      <el-form-item prop="subject_id">
+        <template #label>
+          <div class="label">{{ $t('QUESTION.SUBJECT') }} :</div>
+        </template>
         <el-select
           style="width: 15rem"
-          placeholder="请选择学科"
+          :placeholder="$t('QUESTION.SUBJECT_PLACEHOLDER')"
           clearable
           v-model="editFormData.subject_id"
         >
@@ -146,19 +209,28 @@ const handleCorrect = (correct: string) => {
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="题干 :" prop="title">
-        <RichEditor :form="editFormData"></RichEditor>
+      <el-form-item prop="title">
+        <template #label>
+          <div class="label">{{ $t('QUESTION.QUESTION_TITLE') }} :</div>
+        </template>
+        <RichEditor
+          :title="editFormData.title"
+          :gapFill="true"
+          @getGapFillCount="getGapFillCount"
+          @getEditorValue="getGapFillTitle"
+        ></RichEditor>
       </el-form-item>
-      <el-form-item label="参考答案 :" prop="correct">
+      <el-form-item prop="correct">
+        <template #label>
+          <div class="label">{{ $t('QUESTION.REFERENCE_ANSWER') }} :</div>
+        </template>
         <el-form-item
           class="question-item"
           v-for="(item, index) in editFormData.items"
           :key="index"
           prop="items"
         >
-          <span style="padding: 0 1rem; margin-right: 1rem">{{
-            item.prefix
-          }}</span>
+          <span class="question-item-prefix">{{ item.prefix }}</span>
           <el-input
             v-model="item.content"
             style="width: 400px; margin-right: 1rem"
@@ -169,15 +241,23 @@ const handleCorrect = (correct: string) => {
           </el-button> -->
         </el-form-item>
       </el-form-item>
-      <el-form-item label="分数 :" prop="score">
+      <el-form-item prop="score">
+        <template #label>
+          <div class="label">{{ $t('QUESTION.SCORE') }} :</div>
+        </template>
         <el-input-number style="width: 15rem" v-model="editFormData.score" />
       </el-form-item>
-      <el-form-item label="难度 :" prop="difficult">
+      <el-form-item prop="difficult">
+        <template #label>
+          <div class="label">{{ $t('QUESTION.DIFFICULTY') }} :</div>
+        </template>
         <el-rate v-model="editFormData.difficult" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="submit">
+          {{ $t('QUESTION.SUBMIT') }}
+        </el-button>
+        <el-button @click="reset">{{ $t('QUESTION.RESET') }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -190,6 +270,12 @@ const handleCorrect = (correct: string) => {
   }
   .question-item {
     margin-bottom: 1.25rem;
+    .question-item-prefix {
+      padding: 0 1rem;
+      margin-right: 1rem;
+      width: 50px;
+      display: inline-block;
+    }
   }
 }
 </style>

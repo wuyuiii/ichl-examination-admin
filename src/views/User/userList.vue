@@ -7,6 +7,9 @@ import { getUserListAPI, delStuAPI, updateUserStateAPI } from '@/api/user'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useOptionStore } from '@/stores'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -62,9 +65,13 @@ const checkLog = (row: StuListType) => {
 
 // 删除
 const remove = async (row: StuListType) => {
-  ElMessageBox.confirm(`是否删除用户：${row.real_name}`, '删除用户', {
-    type: 'error'
-  }).then(async () => {
+  ElMessageBox.confirm(
+    `${t('USER_MANAGE.DELETE_USER_CONTENT')}：${row.real_name}`,
+    t('USER_MANAGE.DELETE_USER_TITLE'),
+    {
+      type: 'error'
+    }
+  ).then(async () => {
     const { data: res } = await delStuAPI(row.id)
     if (res.status === 200) {
       ElMessage({
@@ -110,11 +117,13 @@ const handleCurrentChange = (value: number) => {
       <el-input
         class="user-search-input"
         v-model="userListParams.real_name"
-        placeholder="输入姓名查询"
+        :placeholder="$t('USER_MANAGE.PLACEHOLDER')"
         :prefix-icon="Search"
         @change="getUserList"
       ></el-input>
-      <el-button type="primary" @click="edit">添加</el-button>
+      <el-button type="primary" @click="edit">
+        {{ $t('USER_MANAGE.BUTTON') }}
+      </el-button>
     </div>
     <el-table
       v-loading="loading"
@@ -123,53 +132,75 @@ const handleCurrentChange = (value: number) => {
       border
     >
       <el-table-column prop="id" label="ID" width="60px" />
-      <el-table-column prop="user_name" label="用户名" />
-      <el-table-column prop="real_name" label="真实姓名" width="100px" />
-      <el-table-column prop="phone" label="手机号" />
-      <el-table-column prop="age" label="年龄" width="80px" />
-      <el-table-column label="性别" width="54px">
+      <el-table-column prop="user_name" :label="$t('USER_MANAGE.USER_NAME')" />
+      <el-table-column
+        prop="real_name"
+        :label="$t('USER_MANAGE.REAL_NAME')"
+        width="110px"
+      />
+      <el-table-column prop="phone" :label="$t('USER_MANAGE.PHONE')" />
+      <el-table-column prop="age" :label="$t('USER_MANAGE.AGE')" width="54px" />
+      <el-table-column :label="$t('USER_MANAGE.GENDER')" width="80px">
         <template #default="{ row }">
           {{ formatGender(row.gender) }}
         </template>
       </el-table-column>
-      <el-table-column label="学院" v-if="userListParams.role === 1">
+      <el-table-column
+        :label="$t('USER_MANAGE.COLLEGE')"
+        v-if="userListParams.role === 1"
+      >
         <template #default="{ row }">
           {{
             row.user_college_id == void 0
-              ? '暂无'
+              ? $t('USER_MANAGE.NONE')
               : row.user_college_id?.college_name
           }}
         </template>
       </el-table-column>
-      <el-table-column label="专业" v-if="userListParams.role === 1">
+      <el-table-column
+        :label="$t('USER_MANAGE.DEPARTMENT')"
+        v-if="userListParams.role === 1"
+      >
         <template #default="{ row }">
           {{
             row.user_department_id == void 0
-              ? '暂无'
+              ? $t('USER_MANAGE.NONE')
               : row.user_department_id?.department_name
           }}
         </template>
       </el-table-column>
-      <el-table-column label="班级" v-if="userListParams.role === 1">
+      <el-table-column
+        :label="$t('USER_MANAGE.CLASS')"
+        v-if="userListParams.role === 1"
+      >
         <template #default="{ row }">
           {{
-            row.user_class_id == void 0 ? '暂无' : row.user_class_id?.class_name
+            row.user_class_id == void 0
+              ? $t('USER_MANAGE.NONE')
+              : row.user_class_id?.class_name
           }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" width="70px">
+      <el-table-column
+        :label="$t('USER_MANAGE.STATE')"
+        :width="optionStore.languageSwitch ? '90px' : '70px'"
+      >
         <template #default="{ row }">
           <el-tag :type="row.status ? 'success' : 'danger'">
-            {{ row.status ? '启用' : '禁用' }}
+            {{
+              row.status
+                ? $t('USER_MANAGE.STATE_OPTIONS_ENABLE')
+                : $t('USER_MANAGE.STATE_OPTIONS_DISABLE')
+            }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间">
+      <el-table-column :label="$t('USER_MANAGE.CREATE_TIME')">
         <template #default="{ row }">
           {{ formatDate(row.create_time, 'YYYY-MM-DD HH:mm:ss') }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="280px">
+      <el-table-column :label="$t('USER_MANAGE.OPERATE')" width="290px">
         <template #default="{ row }">
           <el-button
             type="warning"
@@ -177,7 +208,11 @@ const handleCurrentChange = (value: number) => {
             plain
             @click="updateState(row)"
           >
-            {{ row.status ? '禁用' : '启用' }}
+            {{
+              row.status
+                ? $t('USER_MANAGE.STATE_OPTIONS_DISABLE')
+                : $t('USER_MANAGE.STATE_OPTIONS_ENABLE')
+            }}
           </el-button>
           <el-button
             type="info"
@@ -186,13 +221,13 @@ const handleCurrentChange = (value: number) => {
             @click="checkLog(row)"
             v-if="userListParams.role === 1"
           >
-            日志
+            {{ $t('USER_MANAGE.LOG') }}
           </el-button>
           <el-button type="primary" size="small" plain @click="edit(row)">
-            编辑
+            {{ $t('USER_MANAGE.EDIT') }}
           </el-button>
           <el-button type="danger" size="small" plain @click="remove(row)">
-            删除
+            {{ $t('USER_MANAGE.DELETE') }}
           </el-button>
         </template>
       </el-table-column>

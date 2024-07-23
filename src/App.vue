@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import { onMounted } from 'vue'
+import en from 'element-plus/es/locale/lang/en'
+import { onMounted, computed } from 'vue'
 import { useOptionStore } from './stores'
 
 const optionStore = useOptionStore()
@@ -10,6 +11,10 @@ const dark = () => {
   }
 }
 
+const locale = computed(() => {
+  return optionStore.languageSwitch ? en : zhCn
+})
+
 onMounted(() => {
   dark()
 })
@@ -18,7 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-config-provider :locale="zhCn">
+  <el-config-provider :locale="locale" id="app">
     <router-view></router-view>
   </el-config-provider>
 </template>

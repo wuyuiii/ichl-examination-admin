@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import * as echarts from 'echarts/core'
+import i18n from '@/i18n'
 import {
   GridComponent,
   TitleComponent,
@@ -12,6 +13,8 @@ import { CanvasRenderer } from 'echarts/renderers'
 import { onMounted } from 'vue'
 import { getChartsDataAPI } from '@/api/home'
 import type { ChartsData, ItemData } from '@/interface'
+
+const { t } = i18n.global
 
 echarts.use([
   GridComponent,
@@ -72,7 +75,7 @@ const getCharts = (data: ChartsData) => {
   const userOption: EChartsOption = {
     title: {
       left: 'center',
-      text: '用户活跃度'
+      text: t('HOME.USER_ACTIiVICT')
     },
     tooltip: {},
     xAxis: {
@@ -96,7 +99,7 @@ const getCharts = (data: ChartsData) => {
   const timuOption: EChartsOption = {
     title: {
       left: 'center',
-      text: '题目月数量'
+      text: t('HOME.QUESTION_MONTH_COUNT')
     },
     tooltip: {},
     xAxis: {
@@ -154,4 +157,3 @@ onMounted(() => {
   }
 }
 </style>
-@/interface/modules/chartsCom

@@ -14,6 +14,10 @@ import {
   updateQuestionAPI
 } from '@/api/question'
 import { useOptionStore } from '@/stores'
+import RichEditor from '@/components/RichEditor.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -47,12 +51,48 @@ if (route.query.id) {
 }
 
 const editFormRules: FormRules = {
-  title: [{ required: true, message: '请输入题干', trigger: 'change' }],
-  subject_id: [{ required: true, message: '请选择学科', trigger: 'change' }],
-  score: [{ required: true, message: '请输入分数', trigger: 'change' }],
-  items: [{ required: true, message: '请添加答案选项', trigger: 'change' }],
-  difficult: [{ required: true, message: '请选择题目难度', trigger: 'change' }],
-  correct: [{ required: true, message: '请添加答案', trigger: 'change' }]
+  title: [
+    {
+      required: true,
+      message: t('QUESTION.QUESTION_TITLE_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  subject_id: [
+    {
+      required: true,
+      message: t('QUESTION.SUBJECT_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  score: [
+    {
+      required: true,
+      message: t('QUESTION.SCORE_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  items: [
+    {
+      required: true,
+      message: t('QUESTION.ANSWER_OPTIONS_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  difficult: [
+    {
+      required: true,
+      message: t('QUESTION.DIFFICULTY_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  correct: [
+    {
+      required: true,
+      message: t('QUESTION.ANSWER_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ]
 }
 
 const editFormRef = ref<FormInstance>()
@@ -116,6 +156,10 @@ const submit = () => {
 const reset = () => {
   editFormRef.value?.resetFields()
 }
+// 获取富文本框的内容
+const getEditorValue = (val: string) => {
+  editFormData.value.title = val
+}
 </script>
 
 <template>
@@ -124,12 +168,15 @@ const reset = () => {
       :model="editFormData"
       :rules="editFormRules"
       ref="editFormRef"
-      label-width="8.75rem"
+      label-width="15rem"
     >
-      <el-form-item label="学科 :" prop="subject_id">
+      <el-form-item prop="subject_id">
+        <template #label>
+          <div class="label">{{ $t('QUESTION.SUBJECT') }} :</div>
+        </template>
         <el-select
           style="width: 15rem"
-          placeholder="请选择学科"
+          :placeholder="$t('QUESTION.SUBJECT_PLACEHOLDER')"
           clearable
           v-model="editFormData.subject_id"
         >
@@ -141,14 +188,24 @@ const reset = () => {
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="题干 :" prop="title">
-        <el-input
+      <el-form-item prop="title">
+        <template #label>
+          <div class="label">{{ $t('QUESTION.QUESTION_TITLE') }} :</div>
+        </template>
+        <!-- <el-input
           style="width: 15rem"
           v-model="editFormData.title"
           placeholder="请输入题干"
+        /> -->
+        <RichEditor
+          :title="editFormData.title"
+          @getEditorValue="getEditorValue"
         />
       </el-form-item>
-      <el-form-item label="选项 :" prop="items">
+      <el-form-item prop="items">
+        <template #label>
+          <div class="label">{{ $t('QUESTION.OPTIONS') }} :</div>
+        </template>
         <el-form-item
           class="question-item"
           v-for="(item, index) in editFormData.items"
@@ -164,11 +221,14 @@ const reset = () => {
             style="width: 400px; margin-right: 1rem"
           />
           <el-button type="danger" @click="editFormData.items.splice(index, 1)">
-            删除
+            {{ $t('QUESTION.DELETE') }}
           </el-button>
         </el-form-item>
       </el-form-item>
-      <el-form-item label="标准答案 :" prop="correct">
+      <el-form-item prop="correct">
+        <template #label>
+          <div class="label">{{ $t('QUESTION.STANDART_ANSWER') }} :</div>
+        </template>
         <el-radio-group v-model="editFormData.correct">
           <el-radio
             v-for="(item, index) in editFormData.items"
@@ -179,15 +239,25 @@ const reset = () => {
           </el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="分数 :" prop="score">
+      <el-form-item prop="score">
+        <template #label>
+          <div class="label">{{ $t('QUESTION.SCORE') }} :</div>
+        </template>
         <el-input-number style="width: 15rem" v-model="editFormData.score" />
       </el-form-item>
-      <el-form-item label="难度 :" prop="difficult">
+      <el-form-item prop="difficult">
+        <template #label>
+          <div class="label">{{ $t('QUESTION.DIFFICULTY') }} :</div>
+        </template>
         <el-rate v-model="editFormData.difficult" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="submit">
+          {{ $t('QUESTION.SUBMIT') }}
+        </el-button>
+        <el-button @click="reset">
+          {{ $t('QUESTION.RESET') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>

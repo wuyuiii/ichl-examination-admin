@@ -6,6 +6,9 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useOptionStore } from '@/stores'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -48,9 +51,13 @@ const edit = (row: DepartmentType) => {
 
 // 删除
 const remove = (row: DepartmentType) => {
-  ElMessageBox.confirm(`是否删除专业：${row.department_name}`, '删除专业', {
-    type: 'error'
-  }).then(async () => {
+  ElMessageBox.confirm(
+    `${t('EDU.DELETE_DEPARTMENT_CONTENT')}：${row.department_name}`,
+    t('EDU.DELETE_DEPARTMENT_TITLE'),
+    {
+      type: 'error'
+    }
+  ).then(async () => {
     const { data: res } = await delDepartmentAPI(row.id as number)
     if (res.status === 200) {
       ElMessage.success(res.message)
@@ -79,12 +86,12 @@ const handleCurrentChange = (value: number) => {
       <el-input
         class="department-search-input"
         v-model="departmentListParams.keyword"
-        placeholder="输入专业查询"
+        :placeholder="$t('EDU.DEPARTMENT_NAME_PLACEHOLDER')"
         clearable
         :prefix-icon="Search"
         @change="getDepartmentList"
       />
-      <el-button type="primary" @click="edit">添加</el-button>
+      <el-button type="primary" @click="edit">{{ $t('EDU.ADD') }}</el-button>
     </div>
     <el-table
       v-loading="loading"
@@ -93,20 +100,29 @@ const handleCurrentChange = (value: number) => {
       style="width: 100%; margin-bottom: 1.875rem"
     >
       <el-table-column label="ID" prop="id"></el-table-column>
-      <el-table-column label="所属学院" prop="college_name"></el-table-column>
-      <el-table-column label="专业名" prop="department_name"></el-table-column>
-      <el-table-column label="专业班级数量" prop="class_size"></el-table-column>
       <el-table-column
-        label="专业学生数量"
+        :label="$t('EDU.AFFILIATED_COLLEGE')"
+        prop="college_name"
+      ></el-table-column>
+      <el-table-column
+        :label="$t('EDU.DEPARTMENT_NAME')"
+        prop="department_name"
+      ></el-table-column>
+      <el-table-column
+        :label="$t('EDU.DEPARTMENT_CLASS_COUNT')"
+        prop="class_size"
+      ></el-table-column>
+      <el-table-column
+        :label="$t('EDU.DEPARTMENT_STUDENT_COUNT')"
         prop="student_num"
       ></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('EDU.OPERATE')">
         <template #default="{ row }">
           <el-button type="primary" size="small" plain @click="edit(row)">
-            编辑
+            {{ $t('EDU.EDIT') }}
           </el-button>
           <el-button type="danger" size="small" plain @click="remove(row)">
-            删除
+            {{ $t('EDU.DELETE') }}
           </el-button>
         </template>
       </el-table-column>

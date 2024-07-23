@@ -26,6 +26,8 @@ import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { socket } from '@/utils/socket'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 onMounted(() => {
   socket.connect()
@@ -47,9 +49,41 @@ const editFormData = ref<CreateVideoDataType>({
 })
 
 const editFormRules: FormRules = {
-  subjectId: [{ required: true, message: '1', trigger: 'change' }],
-  videoName: [{ required: true, message: '1', trigger: 'change' }],
-  edu: [{ required: true, message: '1', trigger: 'change' }]
+  subjectId: [
+    {
+      required: true,
+      message: t('VIDEO.SUBJECT_PLACEHOLDER'),
+      trigger: ['change', 'blur']
+    }
+  ],
+  videoName: [
+    {
+      required: true,
+      message: t('VIDEO.VIDEO_NAME_PLACEHOLDER'),
+      trigger: ['change', 'blur']
+    }
+  ],
+  videoPhoto: [
+    {
+      required: true,
+      message: t('VIDEO.VIDEO_PHOTO_PLACEHOLDER'),
+      trigger: ['change', 'blur']
+    }
+  ],
+  video: [
+    {
+      required: true,
+      message: t('VIDEO.VIDEO_PLACEHOLDER'),
+      trigger: ['change', 'blur']
+    }
+  ],
+  edu: [
+    {
+      required: true,
+      message: t('VIDEO.EDU_OPTIONS_PLACEHOLDER'),
+      trigger: ['change', 'blur']
+    }
+  ]
 }
 const editFormRef = ref<FormInstance>()
 
@@ -256,33 +290,39 @@ const handleVideoBeforeUpload = async (e: any) => {
 const submitProgress = ref(0)
 const submitDialog = ref(false)
 const submit = async () => {
-  const id = JSON.parse(localStorage.getItem('user') as string).userData.id
-  socket.emit('videoSubmit', `${id}`)
-  socket.on('uploadOssProgress', (data) => {
-    submitProgress.value = Math.round(data * 100)
+  editFormRef.value?.validate(async (r) => {
+    if (r) {
+      const id = JSON.parse(localStorage.getItem('user') as string).userData.id
+      socket.emit('videoSubmit', `${id}`)
+      socket.on('uploadOssProgress', (data) => {
+        submitProgress.value = Math.round(data * 100)
+      })
+      submitDialog.value = true
+      let res = null
+      if (route.query.id) {
+        res = await updateVideoAPI(editFormData.value)
+      } else {
+        // 提交时，清空sessionStorage内的video和videoPhoto 后端同时将先前上传的视频和图片上传到oss
+        sessionStorage.removeItem('video')
+        sessionStorage.removeItem('videoPhoto')
+        res = await submitVideoAPI(editFormData.value)
+      }
+      if (res.data.status === 200) {
+        socket.off('uploadOssProgress')
+        submitDialog.value = false
+        ElMessage.success(res.data.message)
+      } else {
+        ElMessage.error(res.data.message)
+      }
+      const index = optionStore.tagBar.findIndex(
+        (item) => item.current === route.fullPath
+      )
+      router.push(optionStore.tagBar[index].back)
+      optionStore.tagBar.splice(index, 1)
+      return
+    }
+    return false
   })
-  submitDialog.value = true
-  let res = null
-  if (route.query.id) {
-    res = await updateVideoAPI(editFormData.value)
-  } else {
-    // 提交时，清空sessionStorage内的video和videoPhoto 后端同时将先前上传的视频和图片上传到oss
-    sessionStorage.removeItem('video')
-    sessionStorage.removeItem('videoPhoto')
-    res = await submitVideoAPI(editFormData.value)
-  }
-  if (res.data.status === 200) {
-    socket.off('uploadOssProgress')
-    submitDialog.value = false
-    ElMessage.success(res.data.message)
-  } else {
-    ElMessage.error(res.data.message)
-  }
-  const index = optionStore.tagBar.findIndex(
-    (item) => item.current === route.fullPath
-  )
-  router.push(optionStore.tagBar[index].back)
-  optionStore.tagBar.splice(index, 1)
 }
 
 // 重置
@@ -322,27 +362,33 @@ const removeVideoFile = async () => {
 <template>
   <div class="video-container">
     <el-form
-      label-width="9.375rem"
+      label-width="15rem"
       :model="editFormData"
       :rules="editFormRules"
       ref="editFormRef"
     >
       <el-form-item prop="edu">
         <template #label>
-          <div class="edit-form-item-label">学院 / 专业 / 班级 :</div>
+          <div class="edit-form-item-label">
+            {{ $t('PAPER.EDU_OPTIONS') }} :
+          </div>
         </template>
         <el-cascader
           style="width: 15rem"
           v-model="editFormData.edu"
           :options="options"
           :props="{ checkStrictly: true }"
+          :placeholder="$t('VIDEO.EDU_OPTIONS_PLACEHOLDER')"
           clearable
         />
       </el-form-item>
-      <el-form-item label="学科 :" prop="subjectId">
+      <el-form-item prop="subjectId">
+        <template #label>
+          <div class="edit-form-item-label">{{ $t('PAPER.SUBJECT') }} :</div>
+        </template>
         <el-select
           style="width: 15rem"
-          placeholder="请选择学科"
+          :placeholder="$t('QUESTION.SUBJECT_PLACEHOLDER')"
           clearable
           v-model="editFormData.subjectId"
         >
@@ -354,14 +400,22 @@ const removeVideoFile = async () => {
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="视频名称 :" prop="videoName">
+      <el-form-item prop="videoName">
+        <template #label>
+          <div class="edit-form-item-label">{{ $t('VIDEO.VIDEO_NAME') }} :</div>
+        </template>
         <el-input
           style="width: 15rem"
           v-model="editFormData.videoName"
-          placeholder="请输入视频名"
+          :placeholder="$t('VIDEO.VIDEO_NAME_PLACEHOLDER')"
         />
       </el-form-item>
-      <el-form-item label="视频封面图片 :" prop="videoName">
+      <el-form-item prop="videoPhoto">
+        <template #label>
+          <div class="edit-form-item-label">
+            {{ $t('VIDEO.VIDEO_PHOTO') }} :
+          </div>
+        </template>
         <div class="video-upload-video-box">
           <div class="upload-input-box">
             <input
@@ -372,7 +426,7 @@ const removeVideoFile = async () => {
               @change="handlePhotoBeforeUpload"
             />
             <el-button type="success" @click="openChoicePhotoFile">
-              导入
+              {{ $t('VIDEO.IMPORT') }}
             </el-button>
           </div>
           <el-image
@@ -383,13 +437,16 @@ const removeVideoFile = async () => {
             <template #error>
               <div class="image-slot">
                 <el-icon><i-ep-picture /></el-icon>
-                <p>请上传视频封面图片</p>
+                <p>{{ $t('VIDEO.VIDEO_PHOTO_PLACEHOLDER') }}</p>
               </div>
             </template>
           </el-image>
         </div>
       </el-form-item>
-      <el-form-item label="视频 :" prop="videoName">
+      <el-form-item prop="video">
+        <template #label>
+          <div class="edit-form-item-label">{{ $t('VIDEO.VIDEO') }} :</div>
+        </template>
         <div class="video-upload-video-box">
           <div class="upload-input-box">
             <input
@@ -400,7 +457,7 @@ const removeVideoFile = async () => {
               @change="handleVideoBeforeUpload"
             />
             <el-button type="success" @click="openChoiceVideoFile">
-              导入
+              {{ $t('VIDEO.IMPORT') }}
             </el-button>
           </div>
           <video
@@ -411,8 +468,10 @@ const removeVideoFile = async () => {
         </div>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="submit">
+          {{ $t('VIDEO.SUBMIT') }}
+        </el-button>
+        <el-button @click="reset">{{ $t('VIDEO.RESET') }}</el-button>
       </el-form-item>
     </el-form>
   </div>

@@ -5,6 +5,8 @@ import { delStuLogAPI, getLogListAPI } from '@/api/user'
 import type { UserLogType, UserLogListType } from '@/interface'
 import { formatDate } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const route = useRoute()
 const logData = ref<UserLogType[]>([])
@@ -25,11 +27,13 @@ getStuLog()
 
 // 删除
 const remove = (row: UserLogType) => {
-  ElMessageBox.confirm(`是否删除操作日志： ${row.content}`, '删除日志', {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(async () => {
+  ElMessageBox.confirm(
+    `${t('USER_MANAGE.DELETE_LOG_CONTENT')}： ${row.content}`,
+    t('USER_MANAGE.DELETE_LOG_TITLE'),
+    {
+      type: 'warning'
+    }
+  ).then(async () => {
     const { data: res } = await delStuLogAPI(row.id)
     if (res.status === 200) {
       ElMessage({
@@ -66,21 +70,27 @@ const handleCurrentChange = (value: number) => {
       style="width: 100%; margin-bottom: 1.875rem"
       border
     >
-      <el-table-column prop="id" label="id" />
-      <el-table-column prop="user_id" label="用户ID" />
-      <el-table-column prop="user_name" label="用户名" />
-      <el-table-column prop="real_name" label="真实姓名" />
-      <el-table-column prop="content" label="操作内容" />
-      <el-table-column prop="create_time" label="操作时间">
+      <el-table-column prop="id" label="ID" />
+      <el-table-column prop="user_id" :label="$t('USER_MANAGE.USER_ID')" />
+      <el-table-column prop="user_name" :label="$t('USER_MANAGE.USER_NAME')" />
+      <el-table-column prop="real_name" :label="$t('USER_MANAGE.REAL_NAME')" />
+      <el-table-column
+        prop="content"
+        :label="$t('USER_MANAGE.OPERATE_VALUE')"
+      />
+      <el-table-column
+        prop="create_time"
+        :label="$t('USER_MANAGE.OPERATE_TIME')"
+      >
         <template #default="{ row }">
           {{ formatDate(row.create_time, 'YYYY-MM-DD HH:mm:ss') }}
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('USER_MANAGE.OPERATE')">
         <template #default="{ row }">
-          <el-button type="danger" @click="remove(row)" size="small"
-            >删除</el-button
-          >
+          <el-button type="danger" @click="remove(row)" size="small">
+            {{ $t('USER_MANAGE.DELETE') }}
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

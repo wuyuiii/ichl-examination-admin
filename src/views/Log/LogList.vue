@@ -47,7 +47,7 @@ const handleCurrentChange = (value: number) => {
       <el-input
         class="log-search-input"
         v-model="logParams.keyword"
-        placeholder="输入真实姓名查询"
+        :placeholder="$t('USER_MANAGE.REAL_NAME_PLACEHOLDER')"
         :prefix-icon="Search"
         @change="getLog"
       ></el-input>
@@ -59,10 +59,26 @@ const handleCurrentChange = (value: number) => {
       border
     >
       <el-table-column prop="id" label="ID" width="100" />
-      <el-table-column prop="user_name" label="用户名" width="200" />
-      <el-table-column prop="real_name" label="真实姓名" width="100" />
-      <el-table-column prop="content" label="操作内容" width="auto" />
-      <el-table-column prop="create_time" label="操作时间" width="200">
+      <el-table-column
+        prop="user_name"
+        :label="$t('USER_MANAGE.USER_NAME')"
+        width="200"
+      />
+      <el-table-column
+        prop="real_name"
+        :label="$t('USER_MANAGE.REAL_NAME')"
+        width="100"
+      />
+      <el-table-column
+        prop="content"
+        :label="$t('USER_MANAGE.OPERATE_VALUE')"
+        width="auto"
+      />
+      <el-table-column
+        prop="create_time"
+        :label="$t('USER_MANAGE.OPERATE_TIME')"
+        width="200"
+      >
         <template #default="{ row }">
           {{ formatDate(row.create_time, 'YYYY-MM-DD HH:mm:ss') }}
         </template>

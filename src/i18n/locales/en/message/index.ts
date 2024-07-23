@@ -1,0 +1,20 @@
+export default {
+  MESSAGE_TITLE: 'Message Title',
+  MESSAGE_TITLE_PLACEHOLDER: 'Enter message title',
+  MESSAGE_CONTENT: 'MEssage Content',
+  MESSAGE_CONTENT_PLACEHOLDER: 'Enter message content',
+  RECEIVE_COUNT: 'Number of recipients',
+  READ_COUNT: 'Number of readers',
+  SEND_USER_NAME: 'sender',
+  SEND_USER_NAME_PLACEHOLDER: "Enter sender's name",
+  RECEIVE_USER_NAME: 'Recipient username',
+  RECEIVE_USER_NAME_PLACEHOLDER: 'Enter recipient username',
+  SEND_TIME: 'Send Time',
+  OPERATE: 'Operate',
+  DELETE: 'Delete',
+  SEND: 'Send',
+  RESET: 'Reset',
+  BUTTON: 'Add',
+  DELETE_MESSAGE_TITLE: 'Delete Message',
+  DELETE_MESSAGE_CONTENT: 'Do you want to delete the message'
+}

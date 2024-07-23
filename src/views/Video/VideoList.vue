@@ -8,6 +8,9 @@ import { delVideoAPI, getVideoListAPI } from '@/api/video'
 import { useOptionStore, useUserStore } from '@/stores'
 import { formatDate } from '@/utils/format'
 import { getSubjectListAPI2 } from '@/api/subject'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -63,9 +66,13 @@ const edit = (row: VideoDataType) => {
 
 // 删除视频
 const remove = async (row: VideoDataType) => {
-  ElMessageBox.confirm(`是否删除视频：${row.video_name}`, '删除视频', {
-    type: 'error'
-  }).then(async () => {
+  ElMessageBox.confirm(
+    `${t('VIDEO.DELETE_VIDEO_CONTENT')}：${row.video_name}`,
+    t('VIDEO.DELETE_VIDEO_TITLE'),
+    {
+      type: 'error'
+    }
+  ).then(async () => {
     const { data: res } = await delVideoAPI(row.id as any)
     if (res.status === 200) {
       ElMessage({
@@ -101,14 +108,14 @@ const handleCurrentChange = (value: number) => {
       <el-input
         class="videoList-search-input"
         v-model="videoListParams.keyword"
-        placeholder="输入视频名查询"
+        :placeholder="$t('VIDEO.VIDEO_NAME_PLACEHOLDER')"
         :prefix-icon="Search"
         @change="getVideoList"
       />
       <el-select
         class="videoList-search-input"
         v-model="videoListParams.subjectId"
-        placeholder="选择学科"
+        :placeholder="$t('QUESTION.SUBJECT_PLACEHOLDER')"
         clearable
         @change="getVideoList"
       >
@@ -119,8 +126,8 @@ const handleCurrentChange = (value: number) => {
           :label="item.name"
         />
       </el-select>
-      <el-button style="margin-right: 1.25rem" type="primary" @click="edit"
-        >添加
+      <el-button style="margin-right: 1.25rem" type="primary" @click="edit">
+        {{ $t('VIDEO.ADD') }}
       </el-button>
     </div>
     <el-table
@@ -130,25 +137,25 @@ const handleCurrentChange = (value: number) => {
       border
     >
       <el-table-column prop="id" label="ID" />
-      <el-table-column prop="subject_id.name" label="学科" />
-      <el-table-column prop="video_name" label="视频名称" />
-      <el-table-column label="创建时间">
+      <el-table-column prop="subject_id.name" :label="$t('SUBJECT.SUBJECT')" />
+      <el-table-column prop="video_name" :label="$t('VIDEO.VIDEO_NAME')" />
+      <el-table-column :label="$t('VIDEO.CREATE_TIME')">
         <template #default="{ row }">
           {{ formatDate(row.create_time, 'YYYY-MM-DD HH:mm:ss') }}
         </template>
       </el-table-column>
-      <el-table-column label="创建人">
+      <el-table-column :label="$t('VIDEO.CREATE_USER')">
         <template #default="{ row }">
           <el-tag type="success">{{ row.create_user_name }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('VIDEO.OPERATE')">
         <template #default="{ row }">
-          <el-button type="primary" size="small" plain @click="edit(row)"
-            >编辑</el-button
-          >
+          <el-button type="primary" size="small" plain @click="edit(row)">
+            {{ $t('VIDEO.EDIT') }}
+          </el-button>
           <el-button type="danger" size="small" plain @click="remove(row)">
-            删除
+            {{ $t('VIDEO.DELETE') }}
           </el-button>
         </template>
       </el-table-column>

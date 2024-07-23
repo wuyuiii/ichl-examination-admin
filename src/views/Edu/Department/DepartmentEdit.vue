@@ -5,11 +5,13 @@ import {
   getDepartmentAPI,
   updateDepartmentAPI
 } from '@/api/edu'
-import type { CollegeListType, CollegeType, DepartmentType } from '@/interface'
+import type { CollegeListType, CollegeType } from '@/interface'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useOptionStore } from '@/stores'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -36,9 +38,19 @@ const editFormData = ref({
 const editFormRef = ref<FormInstance>()
 const editFormRules: FormRules = {
   departmentName: [
-    { required: true, message: '请输入专业名', trigger: 'blur' }
+    {
+      required: true,
+      message: t('EDU.DEPARTMENT_NAME_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
   ],
-  collegeId: [{ required: true, message: '请选择所属学院', trigger: 'change' }]
+  collegeId: [
+    {
+      required: true,
+      message: t('EDU.AFFILIATED_COLLEGE_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ]
 }
 
 // 提交
@@ -113,21 +125,32 @@ const loadmore = () => {
   <div class="departmentEdit-container">
     <el-form
       :model="editFormData"
-      label-width="8.75rem"
+      label-width="15rem"
       ref="editFormRef"
       :rules="editFormRules"
     >
-      <el-form-item label="专业名: " prop="departmentName">
-        <el-input style="width: 15rem" v-model="editFormData.departmentName" />
+      <el-form-item prop="departmentName">
+        <template #label>
+          <div class="label">{{ $t('EDU.DEPARTMENT_NAME') }} :</div>
+        </template>
+        <el-input
+          style="width: 15rem"
+          v-model="editFormData.departmentName"
+          :placeholder="$t('EDU.DEPARTMENT_NAME_PLACEHOLDER')"
+        />
       </el-form-item>
-      <el-form-item label="所属学院: " prop="collegeId">
+      <el-form-item prop="collegeId">
+        <template #label>
+          <div class="label">{{ $t('EDU.AFFILIATED_COLLEGE') }} :</div>
+        </template>
         <el-select
           style="width: 15rem"
           v-model="editFormData.collegeId"
           clearable
           v-loadmore="loadmore"
           :loading="loading"
-          loading-text="加载中"
+          :loading-text="$t('EDU.LOADING_TEXT')"
+          :placeholder="$t('EDU.AFFILIATED_COLLEGE_PLACEHOLDER')"
         >
           <el-option
             v-for="item in collegeData"
@@ -138,8 +161,10 @@ const loadmore = () => {
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="submit">
+          {{ $t('EDU.SUBMIT') }}
+        </el-button>
+        <el-button @click="reset">{{ $t('EDU.RESET') }}</el-button>
       </el-form-item>
     </el-form>
   </div>

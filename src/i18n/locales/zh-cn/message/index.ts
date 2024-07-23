@@ -1,0 +1,20 @@
+export default {
+  MESSAGE_TITLE: '消息标题',
+  MESSAGE_TITLE_PLACEHOLDER: '输入标题',
+  MESSAGE_CONTENT: '消息内容',
+  MESSAGE_CONTENT_PLACEHOLDER: '输入消息内容',
+  RECEIVE_COUNT: '接收人数',
+  READ_COUNT: '已读人数',
+  SEND_USER_NAME: '发送人',
+  SEND_USER_NAME_PLACEHOLDER: '输入发送人姓名',
+  RECEIVE_USER_NAME: '接收人用户名',
+  RECEIVE_USER_NAME_PLACEHOLDER: '输入接收人用户名',
+  SEND_TIME: '发送时间',
+  OPERATE: '操作',
+  DELETE: '删除',
+  SEND: '发送',
+  RESET: '重置',
+  BUTTON: '添加',
+  DELETE_MESSAGE_TITLE: '删除消息',
+  DELETE_MESSAGE_CONTENT: '是否删除消息'
+}

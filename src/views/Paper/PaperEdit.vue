@@ -17,6 +17,9 @@ import { getQuestionListAPI } from '@/api/question'
 import { Search } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus/lib/components'
 import ShowQuestion from '@/views/Question/components/ShowQuestion.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -34,12 +37,48 @@ const editFormData = ref<PaperDataType>({
   score: 0
 })
 const editFormRules: FormRules = {
-  paperType: [{ required: true, message: '1', trigger: 'change' }],
-  subjectId: [{ required: true, message: '1', trigger: 'change' }],
-  paperTitle: [{ required: true, message: '1', trigger: 'change' }],
-  suggestTime: [{ required: true, message: '1', trigger: 'change' }],
-  edu: [{ required: true, message: '1', trigger: 'change' }],
-  titleItems: [{ required: true, message: '1', trigger: 'change' }]
+  paperType: [
+    {
+      required: true,
+      message: t('PAPER.PAPER_TYPE_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  subjectId: [
+    {
+      required: true,
+      message: t('PAPER.SUBJECT_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  paperTitle: [
+    {
+      required: true,
+      message: t('PAPER.PAPER_NAME_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  suggestTime: [
+    {
+      required: true,
+      message: t('PAPER.SUGGEST_TIME_PLACEHOLDER'),
+      trigger: ['change', 'blur']
+    }
+  ],
+  edu: [
+    {
+      required: true,
+      message: t('PAPER.EDU_OPTIONS_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  titleItems: [
+    {
+      required: true,
+      message: t('PAPER.ADD_TITLE_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ]
 }
 
 const getPaper = async () => {
@@ -97,6 +136,22 @@ const addQuestion = (index: number) => {
 
 // 提交
 const submit = async () => {
+  const r = await editFormRef.value?.validate()
+  if (!r) {
+    return
+  }
+
+  if (editFormData.value.titleItems.length === 0) {
+    return ElMessage.warning('请添加标题')
+  }
+  for (let i = 0; i < editFormData.value.titleItems.length; i++) {
+    if (editFormData.value.titleItems[i].name === '') {
+      return ElMessage.warning(`请给标题${i + 1}输入标题`)
+    }
+    if (editFormData.value.titleItems[i].questionItem.length === 0) {
+      return ElMessage.warning(`请给标题${i + 1}添加题目`)
+    }
+  }
   let res = null
   if (!route.query.id) {
     res = await createPaperAPI(editFormData.value)
@@ -124,6 +179,7 @@ const submit = async () => {
 // 重置
 const reset = () => {
   editFormRef.value?.resetFields()
+  editFormData.value.titleItems = []
 }
 
 // dialog
@@ -189,11 +245,13 @@ const handleCurrentChange = (value: number) => {
       ref="editFormRef"
       :model="editFormData"
       :rules="editFormRules"
-      label-width="9.375rem"
+      label-width="15rem"
     >
       <el-form-item prop="edu">
         <template #label>
-          <div class="edit-form-item-label">学院 / 专业 / 班级 :</div>
+          <div class="edit-form-item-label">
+            {{ $t('PAPER.EDU_OPTIONS') }} :
+          </div>
         </template>
         <el-cascader
           style="width: 15rem"
@@ -203,10 +261,13 @@ const handleCurrentChange = (value: number) => {
           clearable
         />
       </el-form-item>
-      <el-form-item label="学科 :" prop="subjectId">
+      <el-form-item prop="subjectId">
+        <template #label>
+          <div class="edit-form-item-label">{{ $t('PAPER.SUBJECT') }} :</div>
+        </template>
         <el-select
           style="width: 15rem"
-          placeholder="请选择学科"
+          :placeholder="$t('PAPER.SUBJECT_PLACEHOLDER')"
           clearable
           v-model="editFormData.subjectId"
         >
@@ -218,59 +279,69 @@ const handleCurrentChange = (value: number) => {
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="试卷类型 :" prop="paperType">
+      <el-form-item prop="paperType">
+        <template #label>
+          <div class="edit-form-item-label">{{ $t('PAPER.PAPER_TYPE') }} :</div>
+        </template>
         <el-select
           style="width: 15rem"
           class="paper-search-input"
           v-model="editFormData.paperType"
-          placeholder="选择试卷类型"
+          :placeholder="$t('PAPER.PAPER_TYPE_PLACEHOLDER')"
           clearable
         >
-          <el-option :value="1" label="固定试卷" />
-          <el-option :value="4" label="时段试卷" />
-          <el-option :value="6" label="任务试卷" />
+          <el-option :value="1" :label="$t('PAPER.PAPER_OPTION_FIXED')" />
+          <el-option :value="4" :label="$t('PAPER.PAPER_OPTION_TIME_SLOT')" />
+          <el-option :value="6" :label="$t('PAPER.PAPER_OPTION_TASK_EXAM')" />
         </el-select>
       </el-form-item>
       <el-form-item
-        label="时间限制 :"
+        :label="$t('PAPER.TIME_LIMIT') + ` :`"
         prop="limitDateTime"
         v-show="editFormData.paperType === 4"
       >
         <el-date-picker
           v-model="editFormData.limitDateTime"
           type="daterange"
-          range-separator="至"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
+          :range-separator="$t('PAPER.TO')"
+          :start-placeholder="$t('PAPER.START_TIME')"
+          :end-placeholder="$t('PAPER.END_TIME')"
         />
       </el-form-item>
-      <el-form-item label="试卷名 :" prop="paperTitle">
+      <el-form-item prop="paperTitle">
+        <template #label>
+          <div class="edit-form-item-label">{{ $t('PAPER.PAPER_NAME') }} :</div>
+        </template>
         <el-input
           style="width: 15rem"
           class="paper-search-input"
           v-model="editFormData.paperTitle"
-          placeholder="输入试卷名"
+          :placeholder="$t('PAPER.PAPER_NAME_PLACEHOLDER')"
         />
       </el-form-item>
       <el-form-item
         v-for="(titleItems, titleItemIndex) in editFormData.titleItems"
         :key="titleItemIndex"
-        :label="`标题${titleItemIndex + 1}`"
         prop="titleItems"
       >
+        <template #label>
+          <div class="edit-form-item-label">
+            {{ $t('PAPER.TITLE') }} {{ titleItemIndex + 1 }} :
+          </div>
+        </template>
         <el-input
           v-model="titleItems.name"
-          placeholder="请输入标题"
+          :placeholder="$t('PAPER.TITLE_PLACEHOLDER')"
           style="width: 15rem; margin-right: 1rem"
         />
-        <el-button type="success" @click="addQuestion(titleItemIndex)"
-          >添加题目</el-button
-        >
+        <el-button type="success" @click="addQuestion(titleItemIndex)">
+          {{ $t('PAPER.ADD_QUESTION') }}
+        </el-button>
         <el-button
           type="danger"
           @click="editFormData.titleItems.splice(titleItemIndex, 1)"
         >
-          删除
+          {{ $t('PAPER.DELETE') }}
         </el-button>
         <el-scrollbar class="paper-title-card-box">
           <el-card
@@ -287,7 +358,7 @@ const handleCurrentChange = (value: number) => {
                       type="danger"
                       @click="removeQuestion(titleItems.questionItem, index)"
                     >
-                      删除
+                      {{ $t('PAPER.DELETE') }}
                     </el-button>
                   </div>
                 </template>
@@ -296,7 +367,12 @@ const handleCurrentChange = (value: number) => {
           </el-card>
         </el-scrollbar>
       </el-form-item>
-      <el-form-item label="建议时长(分钟) :" prop="suggestTime">
+      <el-form-item prop="suggestTime">
+        <template #label>
+          <div class="edit-form-item-label">
+            {{ $t('PAPER.SUGGEST_TIME') }} :
+          </div>
+        </template>
         <el-input-number
           style="width: 15rem"
           class="paper-search-input"
@@ -304,9 +380,13 @@ const handleCurrentChange = (value: number) => {
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="reset">重置</el-button>
-        <el-button type="success" @click="addTitle">添加标题</el-button>
+        <el-button type="primary" @click="submit">
+          {{ $t('PAPER.SUBMIT') }}
+        </el-button>
+        <el-button @click="reset">{{ $t('PAPER.RESET') }}</el-button>
+        <el-button type="success" @click="addTitle">
+          {{ $t('PAPER.ADD_TITLE') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -315,14 +395,14 @@ const handleCurrentChange = (value: number) => {
       <el-input
         class="paper-search-input"
         v-model="questionListData.keyword"
-        placeholder="输入试卷名查询"
+        :placeholder="$t('PAPER.PAPER_NAME_PLACEHOLDER')"
         :prefix-icon="Search"
         @change="getQuestionList"
       />
       <el-select
         class="paper-search-input"
         v-model="questionListData.questionType"
-        placeholder="选择题型"
+        :placeholder="$t('PAPER.QUESTION_TYPE_PLACEHOLDER')"
         clearable
         @change="getQuestionList"
       >
@@ -335,7 +415,7 @@ const handleCurrentChange = (value: number) => {
       <el-select
         class="paper-search-input"
         v-model="questionListData.subjectId"
-        placeholder="选择学科"
+        :placeholder="$t('PAPER.SUBJECT_PLACEHOLDER')"
         clearable
         @change="getQuestionList"
       >
@@ -360,11 +440,11 @@ const handleCurrentChange = (value: number) => {
         type="selection"
       ></el-table-column>
       <el-table-column
-        label="题型"
+        :label="$t('PAPER.QUESTION_TYPE')"
         prop="question_name"
-        width="100"
+        width="150"
       ></el-table-column>
-      <el-table-column label="题干">
+      <el-table-column :label="$t('PAPER.QUESTION_TITLE')">
         <template #default="{ row }">
           <span v-html="row.title"></span>
         </template>
@@ -380,9 +460,11 @@ const handleCurrentChange = (value: number) => {
     />
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button @click="dialogVisible = false">
+          {{ $t('PAPER.CANCEL') }}
+        </el-button>
         <el-button type="primary" @click="confirmSelectQuestion">
-          确认
+          {{ $t('PAPER.CONFIRM') }}
         </el-button>
       </div>
     </template>

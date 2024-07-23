@@ -17,6 +17,9 @@ import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useOptionStore } from '@/stores'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -46,12 +49,34 @@ const editFormData = ref<ClassType>({
 })
 const editFormRef = ref<FormInstance>()
 const editFormRules: FormRules = {
-  class_name: [{ required: true, message: '请输入班级名', trigger: 'blur' }],
-  collegeId: [{ required: true, message: '请选择所属学院', trigger: 'change' }],
-  departmentId: [
-    { required: true, message: '请选择所属专业', trigger: 'change' }
+  class_name: [
+    {
+      required: true,
+      message: t('EDU.CLASS_NAME_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
   ],
-  classNode: [{ required: true, message: '请输入班级码', trigger: 'blur' }]
+  collegeId: [
+    {
+      required: true,
+      message: t('EDU.AFFILIATED_COLLEGE_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  departmentId: [
+    {
+      required: true,
+      message: t('EDU.AFFILIATED_DEPARTMENT_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ],
+  classNode: [
+    {
+      required: true,
+      message: t('EDU.CLASS_CODE_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ]
 }
 
 // 提交
@@ -165,26 +190,33 @@ const selectCollege = (val: string) => {
   <div class="classEdit-container">
     <el-form
       :model="editFormData"
-      label-width="8.75rem"
+      label-width="15rem"
       ref="editFormRef"
       :rules="editFormRules"
     >
-      <el-form-item label="班级名: " prop="class_name">
+      <el-form-item prop="class_name">
+        <template #label>
+          <div class="label">{{ $t('EDU.CLASS_NAME') }} :</div>
+        </template>
         <el-input
           style="width: 15rem"
           v-model="editFormData.class_name"
-          placeholder="请输入班级名"
+          :placeholder="$t('EDU.CLASS_NAME_PLACEHOLDER')"
         />
       </el-form-item>
-      <el-form-item label="所属学院: " prop="collegeId">
+      <el-form-item prop="collegeId">
+        <template #label>
+          <div class="label">{{ $t('EDU.AFFILIATED_COLLEGE') }} :</div>
+        </template>
         <el-select
           style="width: 15rem"
           v-model="editFormData.collegeId"
           clearable
           v-loadmore="collegeLoadmore"
           :loading="collegeLoading"
-          loading-text="加载中"
+          :loading-text="$t('EDU.LOADING_TEXT')"
           @change="selectCollege"
+          :placeholder="$t('EDU.AFFILIATED_COLLEGE_PLACEHOLDER')"
         >
           <el-option
             v-for="item in collegeData"
@@ -194,14 +226,18 @@ const selectCollege = (val: string) => {
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="所属专业: " prop="departmentId">
+      <el-form-item prop="departmentId">
+        <template #label>
+          <div class="label">{{ $t('EDU.AFFILIATED_DEPARTMENT') }} :</div>
+        </template>
         <el-select
           style="width: 15rem"
           v-model="editFormData.departmentId"
           clearable
           v-loadmore="departmentLoadmore"
           :loading="departmentLoading"
-          loading-text="加载中"
+          :loading-text="$t('EDU.LOADING_TEXT')"
+          :placeholder="$t('EDU.AFFILIATED_DEPARTMENT_PLACEHOLDER')"
         >
           <el-option
             v-for="item in departmentData"
@@ -211,12 +247,21 @@ const selectCollege = (val: string) => {
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="班级码: " prop="classNode">
-        <el-input style="width: 15rem" v-model="editFormData.classNode" />
+      <el-form-item prop="classNode">
+        <template #label>
+          <div class="label">{{ $t('EDU.CLASS_CODE') }} :</div>
+        </template>
+        <el-input
+          style="width: 15rem"
+          v-model="editFormData.classNode"
+          :placeholder="$t('EDU.CLASS_CODE_PLACEHOLDER')"
+        />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="submit">
+          {{ $t('EDU.SUBMIT') }}
+        </el-button>
+        <el-button @click="reset">{{ $t('EDU.RESET') }}</el-button>
       </el-form-item>
     </el-form>
   </div>

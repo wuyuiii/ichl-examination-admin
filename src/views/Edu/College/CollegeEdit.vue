@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import { addCollegeAPI, getCollegeAPI, updateCollegeAPI } from '@/api/edu'
-import type { CollegeType } from '@/interface'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useOptionStore } from '@/stores'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -28,7 +29,13 @@ const editFormData = ref({
 })
 const editFormRef = ref<FormInstance>()
 const editFormRules: FormRules = {
-  collegeName: [{ required: true, message: '请输入学院名', trigger: 'blur' }]
+  collegeName: [
+    {
+      required: true,
+      message: t('EDU.COLLEGE_NAME_PLACEHOLDER'),
+      trigger: ['blur', 'change']
+    }
+  ]
 }
 
 // 提交
@@ -77,12 +84,21 @@ const reset = () => {
       ref="editFormRef"
       :rules="editFormRules"
     >
-      <el-form-item label="学院名: " prop="collegeName">
-        <el-input style="width: 15rem" v-model="editFormData.collegeName" />
+      <el-form-item prop="collegeName">
+        <template #label>
+          <div class="label">{{ $t('EDU.COLLEGE_NAME') }} :</div>
+        </template>
+        <el-input
+          style="width: 15rem"
+          v-model="editFormData.collegeName"
+          :placeholder="$t('EDU.COLLEGE_NAME_PLACEHOLDER')"
+        />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="submit">
+          {{ $t('EDU.SUBMIT') }}
+        </el-button>
+        <el-button @click="reset">{{ $t('EDU.RESET') }}</el-button>
       </el-form-item>
     </el-form>
   </div>

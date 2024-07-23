@@ -6,6 +6,9 @@ import { addSubjectAPI, getSubjectAPI, updateSubjectAPI } from '@/api/subject'
 import { ElMessage } from 'element-plus'
 import { useOptionStore } from '@/stores'
 import type { FormInstance, FormRules } from 'element-plus/lib/components'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -27,7 +30,13 @@ const editFormData = ref<SubjectDataType>({
 })
 const editFormRef = ref<FormInstance>()
 const editFormRules: FormRules = {
-  name: [{ required: true, message: '请输入学科名', trigger: 'blur' }]
+  name: [
+    {
+      required: true,
+      message: t('SUBJECT.SUBJECT_PLACEHOLDER'),
+      trigger: 'blur'
+    }
+  ]
 }
 
 // 提交
@@ -72,28 +81,26 @@ const reset = () => {
       :model="editFormData"
       :rules="editFormRules"
       ref="editFormRef"
-      label-width="8.75rem"
+      label-width="15rem"
     >
       <el-form-item prop="name">
         <template #label>
-          <div class="label">学科:</div>
+          <div class="label">{{ $t('SUBJECT.SUBJECT') }} :</div>
         </template>
         <el-input
           v-model="editFormData.name"
-          placeholder="请输入学科名"
+          :placeholder="$t('SUBJECT.SUBJECT_PLACEHOLDER')"
           style="width: 15rem"
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="submit">
+          {{ $t('SUBJECT.SUBMIT') }}
+        </el-button>
+        <el-button @click="reset">{{ $t('SUBJECT.RESET') }}</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.label {
-  font-weight: 550;
-}
-</style>
+<style lang="scss" scoped></style>

@@ -9,6 +9,8 @@ import { updateMineInfoAPI } from '@/api/user'
 import UploadAvatar from './components/UploadAvatar.vue'
 import { Plus } from '@element-plus/icons-vue'
 import { debounce } from 'lodash'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const userStore = useUserStore()
 
@@ -71,15 +73,25 @@ const checkPhone = (rule: any, value: any, callback: Function) => {
   if (reg.test(value)) {
     return callback()
   }
-  return callback(new Error('请输入正确的手机号'))
+  return callback(new Error(t('CENTER.PHONE_TRUE_PLACEHOLDER')))
 }
 
 const editFormRef = ref<FormInstance>()
 const editFormRules: FormRules = {
-  real_name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-  age: [],
-  gender: [{ required: true, message: '请选择性别', trigger: 'change' }],
-  birth_day: [],
+  real_name: [
+    {
+      required: true,
+      message: t('CENTER.REAL_NAME_PLACEHOLDER'),
+      trigger: ['change', 'blur']
+    }
+  ],
+  gender: [
+    {
+      required: true,
+      message: t('CENTER.GENDER_PLACEHOLDER'),
+      trigger: ['change', 'blur']
+    }
+  ],
   phone: [
     {
       validator: checkPhone,
@@ -110,7 +122,7 @@ const submit = () => {
     <div class="center-about">
       <el-card shadow="never">
         <template #header>
-          <h3>关于我</h3>
+          <h3>{{ $t('CENTER.ABOUT_ME') }}</h3>
         </template>
         <div class="center-about-avatar">
           <UploadAvatar>
@@ -131,26 +143,26 @@ const submit = () => {
         <div class="center-about-info">
           <ul>
             <li>
-              <span>姓名 : </span>
+              <span>{{ $t('CENTER.REAL_NAME') }} : </span>
               {{ userStore.userData.real_name }}
             </li>
             <li>
-              <span>年龄 : </span>
+              <span>{{ $t('CENTER.AGE') }} : </span>
               {{ userStore.userData.age }}
             </li>
             <li>
-              <span>性别 : </span>
+              <span>{{ $t('CENTER.GENDER') }} : </span>
               {{
                 userStore.userData.gender &&
                 formatGender(userStore.userData.gender)
               }}
             </li>
             <li>
-              <span>手机号 : </span>
+              <span>{{ $t('CENTER.PHONE') }} : </span>
               {{ userStore.userData.phone }}
             </li>
             <li>
-              <span>出生日期 : </span>
+              <span>{{ $t('CENTER.BIRTHDAY') }} : </span>
               {{
                 userStore.userData.birth_day &&
                 formatDate(userStore.userData.birth_day, 'YYYY-MM-DD')
@@ -163,7 +175,11 @@ const submit = () => {
     <div class="center-data">
       <el-card style="height: 100%" shadow="never">
         <el-tabs v-model="activeName" style="height: 100%">
-          <el-tab-pane label="我的动态" name="first" style="height: 100%">
+          <el-tab-pane
+            :label="$t('CENTER.UPDATE')"
+            name="first"
+            style="height: 100%"
+          >
             <el-scrollbar height="100%" @scroll="handleScroll" ref="scrollRef">
               <el-timeline style="max-width: 600px">
                 <el-timeline-item
@@ -185,52 +201,82 @@ const submit = () => {
               </el-timeline>
             </el-scrollbar>
           </el-tab-pane>
-          <el-tab-pane label="账号资料" name="second">
+          <el-tab-pane :label="$t('CENTER.ACCOUNT_INFO')" name="second">
             <el-form
               :model="editFormData"
               ref="editFormRef"
               :rules="editFormRules"
               label-width="6.25rem"
             >
-              <el-form-item label="姓名 : " prop="real_name">
+              <el-form-item prop="real_name">
+                <template #label>
+                  <div class="edit-form-item-label">
+                    {{ $t('CENTER.REAL_NAME') }} :
+                  </div>
+                </template>
                 <el-input
                   v-model="editFormData.real_name"
                   style="width: 15rem"
+                  :placeholder="$t('CENTER.REAL_NAME_PLACEHOLDER')"
+                  clearable
                 />
               </el-form-item>
-              <el-form-item label="年龄 : " prop="age">
+              <el-form-item prop="age">
+                <template #label>
+                  <div class="edit-form-item-label">
+                    {{ $t('CENTER.AGE') }} :
+                  </div>
+                </template>
                 <el-input-number
                   v-model="editFormData.age"
                   style="width: 15rem"
                 />
               </el-form-item>
-              <el-form-item label="性别 : " prop="gender">
+              <el-form-item prop="gender">
+                <template #label>
+                  <div class="edit-form-item-label">
+                    {{ $t('CENTER.GENDER') }} :
+                  </div>
+                </template>
                 <el-select
                   v-model="editFormData.gender"
                   style="width: 15rem"
-                  placeholder="请选择性别"
+                  :placeholder="$t('CENTER.GENDER_PLACEHOLDER')"
                   clearable
                 >
-                  <el-option label="男" :value="1" />
-                  <el-option label="女" :value="0" />
+                  <el-option :label="$t('USER_MANAGE.MAN')" :value="1" />
+                  <el-option :label="$t('USER_MANAGE.WOMAN')" :value="0" />
                 </el-select>
               </el-form-item>
-              <el-form-item label="手机号 : " prop="phone">
+              <el-form-item prop="phone">
+                <template #label>
+                  <div class="edit-form-item-label">
+                    {{ $t('CENTER.PHONE') }} :
+                  </div>
+                </template>
                 <el-input
                   style="width: 15rem"
                   v-model="editFormData.phone"
+                  :placeholder="$t('CENTER.PHONE_TRUE_PLACEHOLDER')"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="出生日期 : " prop="birth_day">
+              <el-form-item prop="birth_day">
+                <template #label>
+                  <div class="edit-form-item-label">
+                    {{ $t('CENTER.BIRTHDAY') }} :
+                  </div>
+                </template>
                 <el-date-picker
                   v-model="editFormData.birth_day"
                   type="date"
-                  placeholder="请选择日期"
+                  :placeholder="$t('CENTER.BIRTHDAY_PLACEHOLDER')"
                   style="width: 15rem"
                 />
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="submit">提交</el-button>
+                <el-button type="primary" @click="submit">{{
+                  $t('CENTER.SUBMIT')
+                }}</el-button>
               </el-form-item>
             </el-form>
           </el-tab-pane>

@@ -11,6 +11,10 @@ import type {
   FormRules
 } from 'element-plus/lib/components/index.js'
 
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 const route = useRoute()
 const router = useRouter()
 const optionStore = useOptionStore()
@@ -52,21 +56,67 @@ const editFormData = ref<EditDataType>({
   status: null
 })
 const editFormRules: FormRules = {
-  user_name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-  real_name: [{ required: true, message: '请输入真实姓名', trigger: 'blur' }],
+  user_name: [
+    {
+      required: true,
+      message: t('USER_MANAGE.USER_NAME_PLACEHOLDER'),
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: t('USER_MANAGE.PASSWORD_PLACEHOLDER'),
+      trigger: 'blur'
+    }
+  ],
+  real_name: [
+    {
+      required: true,
+      message: t('USER_MANAGE.REAL_NAME_PLACEHOLDER'),
+      trigger: 'blur'
+    }
+  ],
   phone: [
-    { required: true, message: '请输入手机号', trigger: 'blur' },
+    {
+      required: true,
+      message: t('USER_MANAGE.PHONE_PLACEHOLDER'),
+      trigger: 'blur'
+    },
     {
       pattern: /^1[3-9]\d{9}$/,
       message: '请输入正确的手机格式',
       trigger: 'blur'
     }
   ],
-  gender: [{ required: true, message: '请选择性别', trigger: 'blur' }],
-  birth_day: [{ required: true, message: '请选择出生日期', trigger: 'change' }],
-  role: [{ required: true, message: '请选择用户权限', trigger: 'change' }],
-  status: [{ required: true, message: '请选择用户状态', trigger: 'blur' }]
+  gender: [
+    {
+      required: true,
+      message: t('USER_MANAGE.GENDER_PLACEHOLDER'),
+      trigger: 'blur'
+    }
+  ],
+  birth_day: [
+    {
+      required: true,
+      message: t('USER_MANAGE.BIRTHDAY_PLACEHOLDER'),
+      trigger: 'change'
+    }
+  ],
+  role: [
+    {
+      required: true,
+      message: t('USER_MANAGE.AUTHORITY_PLACEHOLDER'),
+      trigger: 'change'
+    }
+  ],
+  status: [
+    {
+      required: true,
+      message: t('USER_MANAGE.STATE_PLACEHOLDER'),
+      trigger: 'blur'
+    }
+  ]
 }
 
 // 提交
@@ -120,88 +170,102 @@ getEduOption()
     <el-form
       :model="editFormData"
       :rules="editFormRules"
-      label-width="8.75rem"
+      label-width="15rem"
       ref="editFormRef"
     >
       <el-form-item prop="user_name">
         <template #label>
-          <div class="edit-form-item-label">用户名 :</div>
+          <div class="edit-form-item-label">
+            {{ $t('USER_MANAGE.USER_NAME') }} :
+          </div>
         </template>
         <el-input
           v-model="editFormData.user_name"
-          placeholder="请输入用户名"
+          :placeholder="$t('USER_MANAGE.USER_NAME_PLACEHOLDER')"
           style="width: 15rem"
         ></el-input>
       </el-form-item>
       <el-form-item prop="password">
         <template #label>
-          <div class="edit-form-item-label">密码 :</div>
+          <div class="edit-form-item-label">
+            {{ $t('USER_MANAGE.PASSWORD') }} :
+          </div>
         </template>
         <el-input
           v-model="editFormData.password"
-          placeholder="请输入密码"
+          :placeholder="$t('USER_MANAGE.PASSWORD_PLACEHOLDER')"
           style="width: 15rem"
         ></el-input>
       </el-form-item>
       <el-form-item prop="real_name">
         <template #label>
-          <div class="edit-form-item-label">真实姓名 :</div>
+          <div class="edit-form-item-label">
+            {{ $t('USER_MANAGE.REAL_NAME') }} :
+          </div>
         </template>
         <el-input
           v-model="editFormData.real_name"
-          placeholder="请输入真实姓名"
+          :placeholder="$t('USER_MANAGE.REAL_NAME_PLACEHOLDER')"
           style="width: 15rem"
         ></el-input>
       </el-form-item>
       <el-form-item prop="phone">
         <template #label>
-          <div class="edit-form-item-label">手机号 :</div>
+          <div class="edit-form-item-label">
+            {{ $t('USER_MANAGE.PHONE') }} :
+          </div>
         </template>
         <el-input
           v-model="editFormData.phone"
-          placeholder="请输入手机号"
+          :placeholder="$t('USER_MANAGE.PHONE_PLACEHOLDER')"
           style="width: 15rem"
         ></el-input>
       </el-form-item>
       <el-form-item>
         <template #label>
-          <div class="edit-form-item-label">年龄 :</div>
+          <div class="edit-form-item-label">{{ $t('USER_MANAGE.AGE') }} :</div>
         </template>
         <el-input-number
           v-model="editFormData.age"
           style="width: 15rem"
-          placeholder="请输入年龄"
+          :placeholder="$t('USER_MANAGE.AGE_PLACEHOLDER')"
           :min="18"
         ></el-input-number>
       </el-form-item>
       <el-form-item prop="gender">
         <template #label>
-          <div class="edit-form-item-label">性别 :</div>
+          <div class="edit-form-item-label">
+            {{ $t('USER_MANAGE.GENDER') }} :
+          </div>
         </template>
         <el-select
           v-model="editFormData.gender"
           clearable
-          placeholder="请选择性别"
+          :placeholder="$t('USER_MANAGE.GENDER_PLACEHOLDER')"
           style="width: 15rem"
         >
-          <el-option label="男" :value="1" />
-          <el-option label="女" :value="0" />
+          <el-option :label="$t('USER_MANAGE.MAN')" :value="1" />
+          <el-option :label="$t('USER_MANAGE.WOMAN')" :value="0" />
         </el-select>
       </el-form-item>
       <el-form-item prop="birth_day">
         <template #label>
-          <div class="edit-form-item-label">出生日期 :</div>
+          <div class="edit-form-item-label">
+            {{ $t('USER_MANAGE.BIRTHDAY') }} :
+          </div>
         </template>
         <el-date-picker
           v-model="editFormData.birth_day"
           type="date"
-          placeholder="请选择出生日期"
+          :placeholder="$t('USER_MANAGE.BIRTHDAY_PLACEHOLDER')"
           style="width: 15rem"
         />
       </el-form-item>
       <el-form-item v-if="route.meta.role === 1">
         <template #label>
-          <div class="edit-form-item-label">学院 / 专业 / 班级 :</div>
+          <div class="edit-form-item-label">
+            {{ $t('USER_MANAGE.EDU_OPTIONS') }} :
+          </div>
         </template>
         <el-cascader
           style="width: 15rem"
@@ -213,35 +277,49 @@ getEduOption()
 
       <el-form-item v-if="route.meta.role !== 1" prop="role">
         <template #label>
-          <div class="edit-form-item-label">权限 :</div>
+          <div class="edit-form-item-label">
+            {{ $t('USER_MANAGE.AUTHORITY') }} :
+          </div>
         </template>
         <el-select
           v-model="editFormData.role"
-          placeholder="请选择用户权限"
+          :placeholder="$t('USER_MANAGE.AUTHORITY_PLACEHOLDER')"
           clearable
           style="width: 15rem"
         >
-          <el-option label="老师" :value="2" />
-          <el-option label="管理员" :value="3" />
+          <el-option :label="$t('USER_MANAGE.TEACHER')" :value="2" />
+          <el-option :label="$t('USER_MANAGE.ADMIN')" :value="3" />
         </el-select>
       </el-form-item>
       <el-form-item prop="status">
         <template #label>
-          <div class="edit-form-item-label">状态 :</div>
+          <div class="edit-form-item-label">
+            {{ $t('USER_MANAGE.STATE') }} :
+          </div>
         </template>
         <el-select
           v-model="editFormData.status"
-          placeholder="请选择用户状态"
+          :placeholder="$t('USER_MANAGE.STATE_PLACEHOLDER')"
           clearable
           style="width: 15rem"
         >
-          <el-option label="启用" :value="1" />
-          <el-option label="禁用" :value="0" />
+          <el-option
+            :label="$t('USER_MANAGE.STATE_OPTIONS_ENABLE')"
+            :value="1"
+          />
+          <el-option
+            :label="$t('USER_MANAGE.STATE_OPTIONS_DISABLE')"
+            :value="0"
+          />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit">提交</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="submit">
+          {{ $t('USER_MANAGE.SUBMIT') }}
+        </el-button>
+        <el-button @click="reset">
+          {{ $t('USER_MANAGE.RESET') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>

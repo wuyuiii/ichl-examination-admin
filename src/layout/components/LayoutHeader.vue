@@ -9,10 +9,25 @@ import {
 import { ArrowRight, ArrowDown, Moon, Sunny } from '@element-plus/icons-vue'
 import { useOptionStore, useUserStore } from '@/stores'
 import type { TagBar } from '@/interface'
+import { useI18n } from 'vue-i18n'
 const optionStore = useOptionStore()
 const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
+
+const { locale } = useI18n()
+
+// 切换语言
+const changeLocale = (languageSwitch: boolean) => {
+  optionStore.handleLanguageSwitch(languageSwitch)
+  locale.value = languageSwitch ? 'en' : 'zh-cn'
+}
+watch(
+  () => locale.value,
+  () => {
+    window.location.reload()
+  }
+)
 
 // 主题切换
 const toggleDark = () => {
@@ -208,15 +223,21 @@ const goCenter = () => {
     <div class="header-top">
       <div class="header-left">
         <div class="header-menu-box" @click="optionStore.handleCollapse">
-          <el-icon class="header-menu-click" size="22px">
-            <i-ep-Menu />
-          </el-icon>
+          <svg
+            class="icon header-menu-icon"
+            aria-hidden="true"
+            :style="{ fill: optionStore.themeSwitch ? '#cfd3dc' : '#606266' }"
+          >
+            <use xlink:href="#icon-xitong"></use>
+          </svg>
         </div>
         <el-breadcrumb class="header-breadcrumb" :separator-icon="ArrowRight">
-          <el-breadcrumb-item :to="{ path: '/' }">主页</el-breadcrumb-item>
-          <el-breadcrumb-item v-for="item in breadList" :key="item.path">{{
-            item.meta.title
-          }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/' }">
+            {{ $t('HEADER.HOME') }}
+          </el-breadcrumb-item>
+          <el-breadcrumb-item v-for="item in breadList" :key="item.path">
+            {{ item.meta.title }}
+          </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div class="header-items">
@@ -230,14 +251,31 @@ const goCenter = () => {
               '--el-switch-on-color': optionStore.themeSwitch ? '#2c2c2c' : ''
             }"
           />
-          <el-switch
-            v-model="optionStore.languageSwitch"
-            active-text="英"
-            inactive-text="中"
-            :style="{
-              '--el-switch-on-color': optionStore.themeSwitch ? '#2c2c2c' : ''
-            }"
-          />
+          <el-dropdown>
+            <svg
+              class="icon header-dropdown-language"
+              aria-hidden="true"
+              :style="{ fill: optionStore.themeSwitch ? '#cfd3dc' : '#606266' }"
+            >
+              <use xlink:href="#icon-yuyan"></use>
+            </svg>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  :class="!optionStore.languageSwitch ? 'language-active' : ''"
+                  @click="changeLocale(false)"
+                >
+                  中文
+                </el-dropdown-item>
+                <el-dropdown-item
+                  :class="optionStore.languageSwitch ? 'language-active' : ''"
+                  @click="changeLocale(true)"
+                >
+                  English
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
         <el-dropdown placement="bottom">
           <span class="el-dropdown-span">
@@ -246,8 +284,12 @@ const goCenter = () => {
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click="goCenter"> 个人中心 </el-dropdown-item>
-              <el-dropdown-item @click="logout">退出</el-dropdown-item>
+              <el-dropdown-item @click="goCenter">
+                {{ $t('HEADER.CENTER') }}
+              </el-dropdown-item>
+              <el-dropdown-item @click="logout">
+                {{ $t('HEADER.LOGOUT') }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -259,8 +301,9 @@ const goCenter = () => {
         effect="dark"
         type="success"
         style="margin-bottom: 0.625rem"
-        >主页</el-tag
       >
+        {{ $t('HEADER.HOME') }}
+      </el-tag>
       <el-scrollbar
         @wheel.prevent="handleScroll"
         ref="refScrollbar"
@@ -285,11 +328,17 @@ const goCenter = () => {
         ref="menu"
         :style="{ left: `${menuLeft}px`, top: `${menuTop}px` }"
       >
-        <li @click="closeTag(selectMenuTag)">关闭</li>
-        <li @click="closeOtherTag(selectMenuTag)">关闭其他</li>
-        <li v-show="left" @click="closeLeftTag(selectMenuTag)">关闭左侧</li>
-        <li v-show="right" @click="closeRightTag(selectMenuTag)">关闭右侧</li>
-        <li @click="closeAllTag">关闭全部</li>
+        <li @click="closeTag(selectMenuTag)">{{ $t('HEADER.CLOSE') }}</li>
+        <li @click="closeOtherTag(selectMenuTag)">
+          {{ $t('HEADER.CLOSE_OTHER') }}
+        </li>
+        <li v-show="left" @click="closeLeftTag(selectMenuTag)">
+          {{ $t('HEADER.CLOSE_LEFT') }}
+        </li>
+        <li v-show="right" @click="closeRightTag(selectMenuTag)">
+          {{ $t('HEADER.CLOSE_RIGHT') }}
+        </li>
+        <li @click="closeAllTag">{{ $t('HEADER.CLOSE_ALL') }}</li>
       </ul>
     </div>
   </div>
@@ -306,6 +355,7 @@ const goCenter = () => {
     align-items: center;
     justify-content: space-between;
     height: 3.75rem;
+    padding: 6px 0;
     padding-right: 1.25rem;
     border-bottom: 1px solid var(--el-border-color);
     margin-bottom: 0.625rem;
@@ -322,6 +372,9 @@ const goCenter = () => {
         align-items: center;
         justify-content: center;
         transition: all 0.4s;
+        .header-menu-icon {
+          font-size: 18px;
+        }
         .header-menu-click {
           transition: all 0.4s;
         }
@@ -349,12 +402,20 @@ const goCenter = () => {
 
       .header-switch-group {
         display: flex;
-        flex-direction: column;
         justify-content: space-around;
         align-items: center;
         margin-right: 1.25rem;
         .el-switch {
           height: 1.5rem;
+          margin-right: 1.25rem;
+        }
+      }
+      .header-dropdown-language {
+        height: 2.5rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+        :global(.language-active) {
+          color: #67c23a;
         }
       }
       .el-dropdown-span {

@@ -3,6 +3,8 @@
     padding: 0;
     box-sizing: border-box;
     outline: none;
+    font-family: "FangYuanTi";
+    font-weight: 600;
 }
 
 a {
@@ -39,4 +41,10 @@ li {
 
 ::-webkit-scrollbar-track {
     border-radius: 10px;
+}
+
+@font-face {
+    font-family: "FangYuanTi";
+    src: url("https://ichl-stu-bucket.oss-cn-shenzhen.aliyuncs.com/AlimamaFangYuanTiVF-Thin.ttf");
+    font-display: swap;
 }

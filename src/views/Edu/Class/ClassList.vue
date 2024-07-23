@@ -19,6 +19,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { useOptionStore } from '@/stores'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { formatGender } from '@/utils/format'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const route = useRoute()
 const router = useRouter()
@@ -64,9 +67,13 @@ const edit = (row: ClassType) => {
 
 // 删除
 const remove = (row: ClassType) => {
-  ElMessageBox.confirm(`是否删除班级：${row.class_name}`, '删除班级', {
-    type: 'error'
-  }).then(async () => {
+  ElMessageBox.confirm(
+    `${t('EDU.DELETE_CLASS_CONTENT')}：${row.class_name}`,
+    t('EDU.DELETE_CLASS_TITLE'),
+    {
+      type: 'error'
+    }
+  ).then(async () => {
     const { data: res } = await delClassAPI(row.id as number)
     if (res.status === 200) {
       ElMessage.success(res.message)
@@ -198,12 +205,12 @@ const handleSelectConfirm = async () => {
       <el-input
         class="class-search-input"
         v-model="classListParams.keyword"
-        placeholder="输入班级查询"
+        :placeholder="$t('EDU.CLASS_NAME_PLACEHOLDER')"
         clearable
         :prefix-icon="Search"
         @change="getClassList"
       />
-      <el-button type="primary" @click="edit">添加</el-button>
+      <el-button type="primary" @click="edit">{{ $t('EDU.ADD') }}</el-button>
     </div>
     <el-table
       v-loading="loading"
@@ -212,33 +219,44 @@ const handleSelectConfirm = async () => {
       style="width: 100%; margin-bottom: 1.875rem"
     >
       <el-table-column label="ID" prop="id"></el-table-column>
-      <el-table-column label="班级名" prop="class_name"></el-table-column>
-      <el-table-column label="班级码" prop="class_node"></el-table-column>
-      <el-table-column label="所属学院" prop="college_name"></el-table-column>
       <el-table-column
-        label="所属专业"
+        :label="$t('EDU.CLASS_NAME')"
+        prop="class_name"
+      ></el-table-column>
+      <el-table-column
+        :label="$t('EDU.CLASS_CODE')"
+        prop="class_node"
+        width="80px"
+      ></el-table-column>
+      <el-table-column
+        :label="$t('EDU.AFFILIATED_COLLEGE')"
+        prop="college_name"
+      ></el-table-column>
+      <el-table-column
+        :label="$t('EDU.AFFILIATED_DEPARTMENT')"
         prop="department_name"
       ></el-table-column>
       <el-table-column
-        label="班级学生数量"
+        :label="$t('EDU.CLASS_STUDENT_COUNT')"
         prop="student_num"
+        width="200px"
       ></el-table-column>
-      <el-table-column label="操作" width="400px">
+      <el-table-column :label="$t('EDU.OPERATE')" width="520px">
         <template #default="{ row }">
           <el-button type="info" size="small" plain @click="getStudent(row)">
-            查看学生
+            {{ $t('EDU.CHECK_STUDENT') }}
           </el-button>
           <el-button type="success" size="small" plain @click="addStudent(row)">
-            添加学生
+            {{ $t('EDU.ADD_STUDENT') }}
           </el-button>
           <el-button type="warning" size="small" plain @click="delStudent(row)">
-            移除学生
+            {{ $t('EDU.REMOVE_STUDENT') }}
           </el-button>
           <el-button type="primary" size="small" plain @click="edit(row)">
-            编辑
+            {{ $t('EDU.EDIT') }}
           </el-button>
           <el-button type="danger" size="small" plain @click="remove(row)">
-            删除
+            {{ $t('EDU.DELETE') }}
           </el-button>
         </template>
       </el-table-column>
@@ -257,7 +275,7 @@ const handleSelectConfirm = async () => {
       <el-input
         class="class-search-input"
         v-model="stuListParams.real_name"
-        placeholder="输入姓名查询"
+        :placeholder="$t('USER_MANAGE.PLACEHOLDER')"
         :prefix-icon="Search"
         @change="getClassStudent"
       ></el-input>
@@ -274,24 +292,33 @@ const handleSelectConfirm = async () => {
         v-if="select"
       ></el-table-column>
       <el-table-column label="ID" prop="id" width="80px"></el-table-column>
-      <el-table-column label="用户名" prop="user_name"></el-table-column>
-      <el-table-column label="真实姓名" prop="real_name"></el-table-column>
-      <el-table-column label="手机号" prop="phone"></el-table-column>
-      <el-table-column label="性别" width="80px">
+      <el-table-column
+        :label="$t('USER_MANAGE.USER_NAME')"
+        prop="user_name"
+      ></el-table-column>
+      <el-table-column
+        :label="$t('USER_MANAGE.REAL_NAME')"
+        prop="real_name"
+      ></el-table-column>
+      <el-table-column
+        :label="$t('USER_MANAGE.PHONE')"
+        prop="phone"
+      ></el-table-column>
+      <el-table-column :label="$t('USER_MANAGE.GENDER')" width="80px">
         <template #default="{ row }">
           {{ formatGender(row.gender) }}
         </template>
       </el-table-column>
-      <el-table-column label="学院">
+      <el-table-column :label="$t('USER_MANAGE.COLLEGE')">
         <template #default="{ row }">
           {{
             row.user_college_id == void 0
-              ? '暂无'
+              ? $t('USER_MANAGE.NONE')
               : row.user_college_id?.college_name
           }}
         </template>
       </el-table-column>
-      <el-table-column label="专业">
+      <el-table-column :label="$t('USER_MANAGE.DEPARTMENT')">
         <template #default="{ row }">
           {{
             row.user_department_id == void 0
@@ -300,10 +327,12 @@ const handleSelectConfirm = async () => {
           }}
         </template>
       </el-table-column>
-      <el-table-column label="班级">
+      <el-table-column :label="$t('USER_MANAGE.CLASS')">
         <template #default="{ row }">
           {{
-            row.user_class_id == void 0 ? '暂无' : row.user_class_id?.class_name
+            row.user_class_id == void 0
+              ? $t('USER_MANAGE.NONE')
+              : row.user_class_id?.class_name
           }}
         </template>
       </el-table-column>
@@ -317,8 +346,10 @@ const handleSelectConfirm = async () => {
       @current-change="handleCurrentChange2"
     />
     <template #footer v-if="select">
-      <el-button @click="stuDialog = false">取消</el-button>
-      <el-button type="primary" @click="handleSelectConfirm">确定</el-button>
+      <el-button @click="stuDialog = false">{{ $t('PAPER.CANCEL') }}</el-button>
+      <el-button type="primary" @click="handleSelectConfirm">
+        {{ $t('PAPER.CONFIRM') }}
+      </el-button>
     </template>
   </el-dialog>
 </template>

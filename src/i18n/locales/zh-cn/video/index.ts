@@ -1,0 +1,21 @@
+export default {
+  VIDEO_NAME: '视频名称',
+  VIDEO_NAME_PLACEHOLDER: '输入视频名',
+  CREATE_TIME: '创建时间',
+  CREATE_USER: '创建人',
+  OPERATE: '操作',
+  EDIT: '编辑',
+  DELETE: '删除',
+  VIDEO_PHOTO: '视频封面图片',
+  VIDEO_PHOTO_PLACEHOLDER: '请上传视频封面图片',
+  VIDEO_PLACEHOLDER: '请上传视频',
+  VIDEO: '视频',
+  SUBMIT: '提交',
+  RESET: '重置',
+  IMPORT: '导入',
+  ADD: '添加',
+  DELETE_VIDEO_TITLE: '删除视频',
+  DELETE_VIDEO_CONTENT: '是否删除视频',
+  EDU_OPTIONS_PLACEHOLDER: '请选择学院 / 专业 / 班级',
+  SUBJECT_PLACEHOLDER: '选择学科'
+}

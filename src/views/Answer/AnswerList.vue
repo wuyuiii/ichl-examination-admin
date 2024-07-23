@@ -82,25 +82,25 @@ const handleCurrentChange = (value: number) => {
       <el-input
         class="answer-search-input"
         v-model="answerListParams.keyword"
-        placeholder="输入答卷名查询"
+        :placeholder="$t('PAPER.PAPER_NAME_PLACEHOLDER')"
         :prefix-icon="Search"
         @change="getAnswerList"
       />
       <el-select
         class="answer-search-input"
         v-model="answerListParams.paperType"
-        placeholder="选择答卷类型"
+        :placeholder="$t('PAPER.PAPER_TYPE_PLACEHOLDER')"
         clearable
         @change="getAnswerList"
       >
-        <el-option value="1" label="固定试卷" />
-        <el-option value="4" label="时段试卷" />
-        <el-option value="6" label="任务试卷" />
+        <el-option value="1" :label="$t('PAPER.PAPER_OPTION_FIXED')" />
+        <el-option value="4" :label="$t('PAPER.PAPER_OPTION_TIME_SLOT')" />
+        <el-option value="6" :label="$t('PAPER.PAPER_OPTION_TASK_EXAM')" />
       </el-select>
       <el-select
         class="answer-search-input"
         v-model="answerListParams.subjectId"
-        placeholder="选择学科"
+        :placeholder="$t('PAPER.SUBJECT_PLACEHOLDER')"
         clearable
         @change="getAnswerList"
       >
@@ -114,50 +114,59 @@ const handleCurrentChange = (value: number) => {
       <el-select
         class="answer-search-input"
         v-model="answerListParams.status"
-        placeholder="选择批改状态"
+        :placeholder="$t('ANSWER.STATE_PLACEHOLDER')"
         clearable
         @change="getAnswerList"
       >
-        <el-option label="已批改" :value="1"></el-option>
-        <el-option label="未批改" :value="0"></el-option>
+        <el-option :label="$t('ANSWER.STATE_CORRECT')" :value="1"></el-option>
+        <el-option
+          :label="$t('ANSWER.STATE_NO_CORRECT')"
+          :value="0"
+        ></el-option>
       </el-select>
     </div>
     <el-table style="margin-bottom: 1.25rem" border :data="answerData">
-      <el-table-column label="ID" prop="id" width="80"></el-table-column>
-      <el-table-column label="试卷名" prop="paper_name"></el-table-column>
-      <el-table-column label="学科" prop="subject_id.name"></el-table-column>
-      <el-table-column label="答卷人" width="100">
+      <el-table-column label="ID" prop="id" width="80" />
+      <el-table-column :label="$t('PAPER.PAPER_NAME')" prop="paper_name" />
+      <el-table-column :label="$t('PAPER.SUBJECT')" prop="subject_id.name" />
+      <el-table-column :label="$t('ANSWER.ANSWER_STU')" width="120">
         <template #default="{ row }">
           <el-tag type="primary">{{ row.create_user }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="得分" width="100">
+      <el-table-column :label="$t('ANSWER.ANSWER_SCORE')" width="100">
         <template #default="{ row }">
           {{ row.user_score ? row.user_score : 0 }} /
           {{ row.paper_score }}
         </template>
       </el-table-column>
-      <el-table-column label="题目对错" width="100">
+      <el-table-column :label="$t('ANSWER.QUESTION_TRUE_FALSE')" width="100">
         <template #default="{ row }">
           {{ row.question_correct }} / {{ row.question_count }}
         </template>
       </el-table-column>
-      <el-table-column label="耗时" width="100">
-        <template #default="{ row }"> {{ row.do_time }}分钟 </template>
+      <el-table-column :label="$t('ANSWER.TIME')" width="100">
+        <template #default="{ row }">
+          {{ row.do_time }} {{ $t('ANSWER.MINUTE') }}
+        </template>
       </el-table-column>
-      <el-table-column label="提交时间" width="200">
+      <el-table-column :label="$t('ANSWER.SUBMIT_TIME')" width="200">
         <template #default="{ row }">
           {{ formatDate(row.create_time, 'YYYY-MM-DD HH:mm:ss') }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" width="100">
+      <el-table-column :label="$t('ANSWER.STATE')" width="110">
         <template #default="{ row }">
           <el-tag :type="row.status ? 'success' : 'warning'">
-            {{ row.status ? '已批改' : '未批改' }}
+            {{
+              row.status
+                ? $t('ANSWER.STATE_CORRECT')
+                : $t('ANSWER.STATE_NO_CORRECT')
+            }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="100">
+      <el-table-column :label="$t('ANSWER.OPERATE')" width="100">
         <template #default="{ row }">
           <el-button
             :type="row.status ? 'primary' : 'warning'"
@@ -165,7 +174,7 @@ const handleCurrentChange = (value: number) => {
             plain
             @click="judge(row)"
           >
-            {{ row.status ? '查看' : '批改' }}
+            {{ row.status ? $t('ANSWER.CHECK') : $t('ANSWER.CORRECT') }}
           </el-button>
         </template>
       </el-table-column>
